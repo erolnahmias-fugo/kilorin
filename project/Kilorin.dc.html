@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#101013;font-family:Manrope,system-ui,sans-serif}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(255,255,255,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#fff;color:#111;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 Manrope,sans-serif;color:#eee}
+.dv-sub{font:400 12px/1.5 Manrope,sans-serif;color:rgba(255,255,255,.45);margin:0 0 22px}
+.dv-opts{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(255,255,255,.14);color:#fff;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11.5px/1.3 Manrope,sans-serif;color:rgba(255,255,255,.6)}
+.dv-opt:target .dv-oid{background:#F2C14E;color:#3a2c00}
+.dv-next{margin:24px 0 0;font:12px/1.5 Manrope,sans-serif;color:rgba(255,255,255,.45)}
+.dv-next a{color:#F2C14E}
+.dv-group{flex-basis:100%;font:700 11px Manrope,sans-serif;letter-spacing:.16em;color:rgba(255,255,255,.4);margin:14px 0 -14px}
+.klr{--bg:#F5F3F9;--surface:#FFFFFF;--text:#1B1426;--t80:rgba(27,20,38,.8);--t55:rgba(27,20,38,.55);--t45:rgba(27,20,38,.45);--t35:rgba(27,20,38,.35);--border:rgba(27,20,38,.08);--dash:rgba(27,20,38,.25);--accent:#6A42C8;--btntext:#FFFFFF;--acc-soft:rgba(122,82,214,.12);--acc-border:rgba(122,82,214,.35);--grad:linear-gradient(90deg,#6A42C8,#9C74EE);--track:rgba(27,20,38,.08);--ph:repeating-linear-gradient(45deg,#E7E0F2,#E7E0F2 4px,#DDD3EC 4px,#DDD3EC 8px);--shadow:0 1px 3px rgba(27,20,38,.05);--gold:#8A6508;--gold-border:rgba(184,134,11,.35);--gold-bg:linear-gradient(90deg,rgba(242,193,78,.22),rgba(242,193,78,.08));--good:#1E8A4C;--good-soft:rgba(30,138,76,.12);--bad:#C43D3D;--bad-soft:rgba(196,61,61,.1);--tabbg:rgba(255,255,255,.92);--glow:radial-gradient(ellipse,rgba(122,82,214,.12),transparent 70%);--numshadow:none}
+.klr[data-theme="dark"]{--bg:#0D0A14;--surface:#161122;--text:#F0ECF6;--t80:rgba(240,236,246,.85);--t55:rgba(240,236,246,.55);--t45:rgba(240,236,246,.45);--t35:rgba(240,236,246,.35);--border:rgba(255,255,255,.07);--dash:rgba(240,236,246,.25);--accent:#B18CFF;--btntext:#14101F;--acc-soft:rgba(177,140,255,.13);--acc-border:rgba(177,140,255,.3);--grad:linear-gradient(90deg,#6A4BB8,#B18CFF);--track:rgba(255,255,255,.08);--ph:repeating-linear-gradient(45deg,#221a33,#221a33 4px,#1a1329 4px,#1a1329 8px);--shadow:0 0 0 rgba(0,0,0,0);--gold:#F2C14E;--gold-border:rgba(242,193,78,.35);--gold-bg:linear-gradient(90deg,rgba(242,193,78,.14),rgba(242,193,78,.04));--good:#7CE38B;--good-soft:rgba(124,227,139,.12);--bad:#F06A6A;--bad-soft:rgba(240,106,106,.12);--tabbg:rgba(13,10,20,.92);--glow:radial-gradient(ellipse,rgba(177,140,255,.16),transparent 70%);--numshadow:0 0 30px rgba(177,140,255,.32)}
+@keyframes klr-fall{0%{transform:translateY(-30px) rotate(0deg);opacity:0}12%{opacity:1}100%{transform:translateY(230px) rotate(220deg);opacity:0}}
+@keyframes klr-pop{0%{transform:scale(.5)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes klr-pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes klr-flip{0%{transform:rotateY(0deg)}100%{transform:rotateY(360deg)}}
+@keyframes klr-neon{0%,100%{opacity:1;filter:drop-shadow(0 0 14px rgba(200,106,245,.8))}50%{opacity:.86;filter:drop-shadow(0 0 26px rgba(200,106,245,1))}}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t4">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">Kilorin — komple UI, lila (<a class="dv-oid" href="#3c">3c</a>), light/dark tema ayarlı</span></div>
+<p class="dv-sub">Sağdaki Tweaks panelinden <b>theme: dark</b> seçince tüm ekranlar geceye döner (kumarhane her temada karanlık-neon kalır).</p>
+<div class="dv-opts">
+
+<div class="dv-group">ONBOARDING</div>
+
+<!-- 4a Davet kodu -->
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>Davet kodu</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Onboarding - Davet kodu" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:110px 26px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
+    <span style="display:inline-flex;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 32px 'Space Grotesk';color:#5C4300;box-shadow:0 4px 18px rgba(184,134,11,.4);animation:klr-flip 6s ease-in-out infinite;">K</span>
+    <div style="font:700 30px 'Space Grotesk';letter-spacing:-.02em;margin-top:16px;">Kilorin</div>
+    <div style="font:500 13.5px Manrope;color:var(--t55);margin-top:6px;max-width:250px;">Arkadaşlarınla kilo ver, KLR bas, hepsini kumarda kaybet.</div>
+    <div style="font:700 11px Manrope;letter-spacing:.14em;color:var(--t45);margin-top:44px;">DAVET KODU</div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <div style="width:44px;height:56px;border-radius:12px;background:var(--surface);border:1.5px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 22px 'Space Grotesk';box-shadow:var(--shadow);">K</div>
+      <div style="width:44px;height:56px;border-radius:12px;background:var(--surface);border:1.5px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 22px 'Space Grotesk';box-shadow:var(--shadow);">4</div>
+      <div style="width:44px;height:56px;border-radius:12px;background:var(--surface);border:1.5px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 22px 'Space Grotesk';box-shadow:var(--shadow);">F</div>
+      <div style="width:44px;height:56px;border-radius:12px;background:var(--surface);border:1.5px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 22px 'Space Grotesk';box-shadow:var(--shadow);">7</div>
+      <div style="width:44px;height:56px;border-radius:12px;background:var(--surface);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;"><div style="width:2px;height:24px;background:var(--accent);animation:klr-pulse 1s infinite;"></div></div>
+      <div style="width:44px;height:56px;border-radius:12px;background:var(--surface);border:1.5px solid var(--border);"></div>
+    </div>
+    <div style="font:500 12px Manrope;color:var(--t45);margin-top:14px;">Kodu grubun admin'inden al.</div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:14px;">
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;">Gruba Katıl</div>
+    <div style="text-align:center;font:600 12.5px Manrope;color:var(--accent);">Kurucuysan yeni grup aç →</div>
+    <div style="display:flex;justify-content:center;gap:6px;"><div style="width:18px;height:6px;border-radius:3px;background:var(--accent);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4b Profil bilgileri -->
+<div class="dv-opt" id="4b">
+<div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>Profil bilgileri</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Onboarding - Profil" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:76px 22px 0;display:flex;flex-direction:column;gap:12px;">
+    <div><div style="font:700 24px 'Space Grotesk';letter-spacing:-.01em;">Seni tanıyalım</div><div style="font:500 13px Manrope;color:var(--t55);margin-top:4px;">Günlük kalori hedefini bunlarla hesaplıyoruz.</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 15px;box-shadow:var(--shadow);"><div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--t45);">BOY</div><div style="font:700 22px 'Space Grotesk';font-feature-settings:'tnum';margin-top:5px;">178 <span style="font:600 12px Manrope;color:var(--t45);">cm</span></div></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 15px;box-shadow:var(--shadow);"><div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--t45);">YAŞ</div><div style="font:700 22px 'Space Grotesk';font-feature-settings:'tnum';margin-top:5px;">29</div></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 15px;box-shadow:var(--shadow);">
+      <div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--t45);">CİNSİYET</div>
+      <div style="display:flex;gap:8px;margin-top:9px;">
+        <div style="flex:1;height:40px;border-radius:11px;background:var(--acc-soft);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font:700 13px Manrope;color:var(--accent);">Erkek</div>
+        <div style="flex:1;height:40px;border-radius:11px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font:600 13px Manrope;color:var(--t55);">Kadın</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 15px;box-shadow:var(--shadow);"><div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--t45);">MEVCUT KİLO</div><div style="font:700 22px 'Space Grotesk';font-feature-settings:'tnum';margin-top:5px;">86,4 <span style="font:600 12px Manrope;color:var(--t45);">kg</span></div></div>
+      <div style="background:var(--surface);border:1.5px solid var(--accent);border-radius:16px;padding:13px 15px;box-shadow:var(--shadow);"><div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--accent);">HEDEF KİLO</div><div style="font:700 22px 'Space Grotesk';font-feature-settings:'tnum';margin-top:5px;color:var(--accent);">78,0 <span style="font:600 12px Manrope;color:var(--t45);">kg</span></div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font:500 11.5px Manrope;color:var(--t45);padding:0 4px;"><span>🔒</span><span>Verilerin sadece grubuna görünür — internete değil.</span></div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:14px;">
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;">Devam</div>
+    <div style="display:flex;justify-content:center;gap:6px;"><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div><div style="width:18px;height:6px;border-radius:3px;background:var(--accent);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4c Hedef sonucu -->
+<div class="dv-opt" id="4c">
+<div class="dv-olabel"><a class="dv-oid" href="#4c">4c</a>Günlük hedef sonucu</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Onboarding - Hedef sonucu" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:110px 26px 0;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;">
+    <div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);width:300px;height:220px;background:var(--glow);pointer-events:none;"></div>
+    <div style="font:700 11px Manrope;letter-spacing:.16em;color:var(--t45);">GÜNLÜK HEDEFİN</div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin-top:10px;animation:klr-pop .5s ease-out;">
+      <span style="font:700 64px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.03em;text-shadow:var(--numshadow);">1.850</span>
+      <span style="font:700 20px 'Space Grotesk';color:var(--accent);">kcal</span>
+    </div>
+    <div style="font:500 13px Manrope;color:var(--t55);margin-top:10px;">Haftada ~0,6 kg kayıp · sezon sonu tahmini <b>78,2 kg</b></div>
+    <div style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:18px;margin-top:28px;box-shadow:var(--shadow);overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);font:600 12.5px Manrope;"><span style="color:var(--t55);">Bazal metabolizma</span><span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';">1.780 kcal</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);font:600 12.5px Manrope;"><span style="color:var(--t55);">Aktivite</span><span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';color:var(--good);">+420 kcal</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 16px;font:600 12.5px Manrope;"><span style="color:var(--t55);">Hedef açığı</span><span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';color:var(--bad);">−350 kcal</span></div>
+    </div>
+    <div style="font:500 11.5px Manrope;color:var(--t45);margin-top:14px;">Hedefin altında kapattığın her gün KLR kazanırsın. 💰</div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:14px;">
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;">Onayla ve başla</div>
+    <div style="display:flex;justify-content:center;gap:6px;"><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div><div style="width:18px;height:6px;border-radius:3px;background:var(--accent);"></div><div style="width:6px;height:6px;border-radius:3px;background:var(--track);"></div></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4d Sağlıksız hedef uyarısı -->
+<div class="dv-opt" id="4d">
+<div class="dv-olabel"><a class="dv-oid" href="#4d">4d</a>Sağlıksız hedef uyarısı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Onboarding - Saglıksız hedef uyarısı" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:100px 26px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
+    <div style="width:100%;background:var(--bad-soft);border:1.5px solid var(--bad);border-radius:20px;padding:20px 18px;">
+      <div style="font-size:32px;">⚠️</div>
+      <div style="font:700 18px 'Space Grotesk';margin-top:8px;color:var(--bad);">Bu hedef fazla agresif</div>
+      <div style="font:500 13px/1.55 Manrope;color:var(--t80);margin-top:8px;">70,0 kg hedefi haftada <b>1,4 kg</b> kayıp demek — sağlıklı sınır 1,0 kg. Kilorin sağlıksız zayıflamaya ödül vermez.</div>
+    </div>
+    <div style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:14px;box-shadow:var(--shadow);">
+      <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);">ÖNERİLEN DÜZELTME</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px;">
+        <div><div style="font:700 20px 'Space Grotesk';font-feature-settings:'tnum';text-decoration:line-through;color:var(--t35);">70,0 kg</div><div style="font:600 10.5px Manrope;color:var(--t35);">senin hedefin</div></div>
+        <div style="font:700 18px 'Space Grotesk';color:var(--accent);">→</div>
+        <div><div style="font:700 24px 'Space Grotesk';font-feature-settings:'tnum';color:var(--accent);">80,5 kg</div><div style="font:600 10.5px Manrope;color:var(--t45);">bu sezon için</div></div>
+      </div>
+      <div style="font:500 12px Manrope;color:var(--t55);margin-top:10px;">Günlük hedef: <b>1.610 kcal</b> · Sezon bitince tekrar düşersin.</div>
+    </div>
+    <div style="font:500 11.5px Manrope;color:var(--t45);margin-top:14px;">Uzun oyun, kısa açlıktan iyidir. 🐢</div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:10px;">
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;">Önerilen hedefle devam</div>
+    <div style="height:54px;border-radius:16px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;color:var(--t55);">Hedefi düzenle</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4e Admin onayı -->
+<div class="dv-opt" id="4e">
+<div class="dv-olabel"><a class="dv-oid" href="#4e">4e</a>Admin onayı bekleniyor</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Onboarding - Admin onayı" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:120px 26px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
+    <div style="width:72px;height:72px;border-radius:50%;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font-size:32px;animation:klr-pulse 2s infinite;">⏳</div>
+    <div style="font:700 22px 'Space Grotesk';margin-top:18px;">Admin onayı bekleniyor</div>
+    <div style="font:500 13px/1.5 Manrope;color:var(--t55);margin-top:8px;max-width:260px;">Başvurun <b>Deniz</b>'e gitti. Onaylanınca sezon cüzdanın açılır.</div>
+    <div style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:26px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--acc-soft);border:1.5px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 17px 'Space Grotesk';color:var(--accent);">E</div>
+        <div style="text-align:left;flex:1;"><div style="font:700 14px Manrope;">Emre · 29</div><div style="font:500 11.5px Manrope;color:var(--t55);">86,4 → 78,0 kg · 1.850 kcal/gün</div></div>
+        <div style="font:700 10px Manrope;background:var(--gold-bg);border:1px solid var(--gold-border);color:var(--gold);border-radius:999px;padding:4px 10px;white-space:nowrap;">BEKLİYOR</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);margin-top:14px;padding-top:12px;font:600 12px Manrope;color:var(--t55);">
+        <span>Grup: Ofis Obezleri 🏢</span><span>Üye: 7/10</span>
+      </div>
+    </div>
+    <div style="font:500 12px Manrope;color:var(--t45);margin-top:14px;">Ortalama onay süresi: 2 saat</div>
+  </div>
+  <div style="padding:0 22px 40px;">
+    <div style="height:54px;border-radius:16px;border:1.5px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;color:var(--accent);">Deniz'e dürtme at 👉</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-group">GÜNLÜK DÖNGÜ</div>
+
+<!-- 4f Ana ekran -->
+<div class="dv-opt" id="4f">
+<div class="dv-olabel"><a class="dv-oid" href="#4f">4f</a>Ana ekran / günlük log</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Ana ekran" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:var(--glow);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:var(--t45);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 2px 12px rgba(184,134,11,.4);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;text-shadow:var(--numshadow);">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:var(--gold);margin-top:6px;">KLR <span style="color:var(--accent);font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:var(--accent);">1.240</span><span style="color:var(--t45);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:var(--track);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:var(--grad);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:var(--t55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--surface);border:1px solid var(--acc-border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:var(--accent);">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:var(--t45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:var(--ph);"></div><span style="font:500 10.5px Manrope;color:var(--t45);">foto eklendi</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--acc-border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:var(--accent);">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:var(--t45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:var(--ph);"></div><span style="font:500 10.5px Manrope;color:var(--t45);">foto eklendi</span></div>
+      </div>
+      <div style="border:1.5px dashed var(--dash);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:var(--t80);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:var(--accent);">+</span>
+        <span style="font:500 10.5px Manrope;color:var(--t45);">kalori gir</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:var(--accent);">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:var(--t45);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:var(--t35);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:var(--gold);">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:var(--t55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:var(--gold);">05:12:44</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4g Gün sonu ödül anı -->
+<div class="dv-opt" id="4g">
+<div class="dv-olabel"><a class="dv-oid" href="#4g">4g</a>Gün sonu ödül anı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Gün sonu ödül anı" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:rgba(10,6,18,.72);backdrop-filter:blur(3px);z-index:1;"></div>
+  <!-- coin rain -->
+  <div style="position:absolute;top:120px;left:12%;z-index:3;animation:klr-fall 2.2s linear infinite;"><span style="display:inline-flex;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 10px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="position:absolute;top:110px;left:32%;z-index:3;animation:klr-fall 1.8s linear .5s infinite;"><span style="display:inline-flex;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 8px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="position:absolute;top:100px;right:28%;z-index:3;animation:klr-fall 2.5s linear .9s infinite;"><span style="display:inline-flex;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 11px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="position:absolute;top:130px;right:10%;z-index:3;animation:klr-fall 2s linear 1.4s infinite;"><span style="display:inline-flex;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 9px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;">
+    <div style="background:#161122;border:1px solid rgba(177,140,255,.3);border-radius:24px;padding:26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5);animation:klr-pop .5s ease-out;">
+      <div style="font:700 11px Manrope;letter-spacing:.2em;color:rgba(240,236,246,.5);">GÜN TAMAMLANDI 🎉</div>
+      <div style="width:150px;height:64px;margin:18px auto 0;border-radius:14px;background:#0D0A14;border:1px solid rgba(242,193,78,.4);display:flex;align-items:center;justify-content:center;gap:10px;overflow:hidden;">
+        <span style="display:inline-flex;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 15px 'Space Grotesk';color:#5C4300;animation:klr-flip 1.4s linear infinite;">K</span>
+        <span style="font:700 30px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">+246</span>
+      </div>
+      <div style="font:700 14px 'Space Grotesk';color:#F2C14E;margin-top:8px;">KLR</div>
+      <div style="border-top:1px dashed rgba(240,236,246,.15);margin-top:18px;padding-top:14px;display:flex;flex-direction:column;gap:8px;font:600 13px Manrope;">
+        <div style="display:flex;justify-content:space-between;"><span style="color:rgba(240,236,246,.55);">Temel ödül</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';">220 KLR</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:rgba(240,236,246,.55);">Streak bonusu (%12)</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';color:#B18CFF;">+26 KLR</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:rgba(240,236,246,.55);">Yarınki çarpan</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';color:#B18CFF;">🔥13 · x1,26</span></div>
+      </div>
+      <div style="height:52px;border-radius:15px;background:#B18CFF;color:#14101F;display:flex;align-items:center;justify-content:center;font:700 15px Manrope;margin-top:20px;">Topla</div>
+      <div style="font:500 11px Manrope;color:rgba(240,236,246,.4);margin-top:10px;">13 gün üst üste. Buzdolabın seninle gurur duyuyor.</div>
+    </div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4h Streak kırıldı -->
+<div class="dv-opt" id="4h">
+<div class="dv-olabel"><a class="dv-oid" href="#4h">4h</a>Streak kırıldı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Streak kırıldı" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;">
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:var(--t45);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:var(--track);color:var(--t45);border-radius:999px;padding:3px 9px;">🕯 0 gün · x1,00</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:var(--gold);margin-top:6px;">KLR</div>
+    </div>
+    <div style="background:var(--bad-soft);border:1.5px solid var(--bad);border-radius:20px;padding:18px;text-align:center;">
+      <div style="font-size:30px;">💔</div>
+      <div style="font:700 17px 'Space Grotesk';color:var(--bad);margin-top:6px;">Streak kırıldı</div>
+      <div style="font:500 12.5px/1.5 Manrope;color:var(--t80);margin-top:6px;">Dün hedefi <b>240 kcal</b> aştın. 12 günlük alev söndü, çarpan x1,00'a döndü.</div>
+      <div style="display:flex;justify-content:center;gap:6px;margin-top:12px;font:600 11.5px Manrope;color:var(--t55);">
+        <span style="background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 12px;">🔥 12 → 0</span>
+        <span style="background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 12px;">x1,24 → x1,00</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--acc-border);border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);">
+      <span style="font-size:20px;">🛡</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:var(--accent);">Bir dahakine: Streak Kalkanı</div><div style="font:500 11px Manrope;color:var(--t55);">1 kaçamağı affeder · Dükkânda 400 KLR</div></div>
+      <div style="font:700 12px Manrope;color:var(--btntext);background:var(--accent);border-radius:999px;padding:7px 14px;">Al</div>
+    </div>
+    <div style="text-align:center;font:500 12px Manrope;color:var(--t45);margin-top:4px;">Bugün temiz kapat, alev yeniden yansın. 🔥1'den herkes geçti.</div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4i Streak Kalkanı devrede -->
+<div class="dv-opt" id="4i">
+<div class="dv-olabel"><a class="dv-oid" href="#4i">4i</a>Streak Kalkanı devrede</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Streak kalkanı devrede" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:120px 24px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
+    <div style="width:96px;height:96px;border-radius:50%;background:var(--acc-soft);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:44px;animation:klr-pop .6s ease-out;box-shadow:0 0 40px var(--acc-soft);">🛡</div>
+    <div style="font:700 22px 'Space Grotesk';margin-top:20px;color:var(--accent);">Streak Kalkanı devrede!</div>
+    <div style="font:500 13.5px/1.55 Manrope;color:var(--t80);margin-top:10px;max-width:270px;">Dün hedefi 180 kcal aştın ama kalkan darbeyi yedi. Alevin yanmaya devam ediyor.</div>
+    <div style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;font:600 13px Manrope;">
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--t55);">Streak</span><span>🔥 12 gün <span style="color:var(--good);">korundu</span></span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--t55);">Çarpan</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';">x1,24 <span style="color:var(--good);">korundu</span></span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--t55);">Kalkan</span><span style="color:var(--bad);">kullanıldı · 0 kaldı</span></div>
+    </div>
+    <div style="font:500 12px Manrope;color:var(--t45);margin-top:14px;">Yenisi dükkânda seni bekliyor — 400 KLR.</div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:10px;">
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;">Yeni kalkan al · 400 KLR</div>
+    <div style="height:54px;border-radius:16px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;color:var(--t55);">Riskle yaşarım 😎</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4j Tartı günü -->
+<div class="dv-opt" id="4j">
+<div class="dv-olabel"><a class="dv-oid" href="#4j">4j</a>Tartı günü</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Tartı günü" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 20px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="font:700 22px 'Space Grotesk';">Tartı Günü ⚖️</div>
+      <span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 12px;">SALI · HAFTA 5</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 16px;box-shadow:var(--shadow);">
+      <div style="display:flex;justify-content:space-around;text-align:center;">
+        <div><div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--t45);">BEKLENEN</div><div style="font:700 30px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;color:var(--t55);">84,2</div><div style="font:600 11px Manrope;color:var(--t35);">kg</div></div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div><div style="font:700 10.5px Manrope;letter-spacing:.12em;color:var(--accent);">GİRİLEN</div><div style="font:700 30px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;color:var(--accent);">84,0</div><div style="font:600 11px Manrope;color:var(--t35);">kg</div></div>
+      </div>
+      <div style="margin-top:16px;">
+        <div style="display:flex;justify-content:space-between;font:600 10px Manrope;color:var(--t45);"><span>83,4</span><span>tolerans: +0,4 kg</span><span>85,0</span></div>
+        <div style="height:10px;border-radius:999px;margin-top:5px;position:relative;background:linear-gradient(90deg,var(--good) 0 56%,#D9A514 56% 68%,var(--bad) 68% 100%);opacity:.85;">
+          <div style="position:absolute;left:37%;top:-4px;width:4px;height:18px;border-radius:2px;background:var(--text);box-shadow:0 0 0 2px var(--surface);"></div>
+        </div>
+        <div style="font:600 11.5px Manrope;color:var(--good);margin-top:7px;">Yeşil bölgedesin — beklenenin 0,2 kg altı. 👏</div>
+      </div>
+    </div>
+    <div style="border:1.5px dashed var(--dash);border-radius:18px;padding:16px;display:flex;align-items:center;gap:12px;">
+      <div style="width:52px;height:52px;border-radius:12px;background:var(--ph);flex:none;"></div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;">Baskül fotoğrafı</div><div style="font:500 11px Manrope;color:var(--t45);">Ayak parmakların da görünsün — kurallar kurallardır.</div></div>
+      <div style="font:700 12px Manrope;color:var(--accent);">Yükle</div>
+    </div>
+    <div style="background:var(--gold-bg);border:1.5px solid var(--gold-border);border-radius:20px;padding:18px;text-align:center;animation:klr-pop .5s ease-out;">
+      <div style="display:flex;justify-content:center;align-items:center;gap:10px;">
+        <span style="display:inline-flex;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 15px 'Space Grotesk';color:#5C4300;animation:klr-flip 1.6s linear infinite;">K</span>
+        <span style="font:700 32px 'Space Grotesk';font-feature-settings:'tnum';color:var(--gold);">+300</span>
+        <span style="font:700 14px 'Space Grotesk';color:var(--gold);">KLR</span>
+      </div>
+      <div style="font:700 13px Manrope;margin-top:6px;">Tartı ödülü kazandın! 🎉</div>
+      <div style="font:500 11.5px Manrope;color:var(--t55);margin-top:3px;">Admin onayından sonra bakiyene geçer.</div>
+    </div>
+    <div style="text-align:center;font:500 12px Manrope;color:var(--t45);">Sonraki tartı: <b>Cuma</b> · Beklenen: 83,9 kg</div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-group">EKONOMİ</div>
+
+<!-- 4k Piyasa -->
+<div class="dv-opt" id="4k">
+<div class="dv-olabel"><a class="dv-oid" href="#4k">4k</a>Piyasa / fırsatlar (3. kart tuzak)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Piyasa" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 18px 0;display:flex;flex-direction:column;gap:11px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="font:700 22px 'Space Grotesk';">Piyasa</div>
+      <div style="text-align:right;"><div style="font:600 9.5px Manrope;letter-spacing:.1em;color:var(--t45);">VİTRİN YENİLENİR</div><div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:var(--gold);">02:14:09</div></div>
+    </div>
+    <!-- mevduat -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 15px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;border-radius:12px;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;">🏦</div>
+        <div style="flex:1;"><div style="font:700 13.5px Manrope;">Vadeli Mevduat</div><div style="font:500 11px Manrope;color:var(--t55);">3 gün kilitli · erken çekimde faiz yanar</div></div>
+        <div style="text-align:right;"><div style="font:700 17px 'Space Grotesk';color:var(--good);">%18</div><div style="font:600 10px Manrope;color:var(--t45);">3 günde</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);margin-top:11px;padding-top:10px;">
+        <span style="font:600 11px Manrope;color:var(--t45);">Min 500 KLR · stok sınırsız</span>
+        <span style="font:700 12px Manrope;color:var(--accent);">İncele →</span>
+      </div>
+    </div>
+    <!-- BTC -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 15px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;border-radius:12px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;">🪙</div>
+        <div style="flex:1;"><div style="font:700 13.5px Manrope;">Bitcoin (grup borsası)</div><div style="font:500 11px Manrope;color:var(--t55);">Canlı fiyat · kaldıraç yok · anında satılır</div></div>
+        <div style="text-align:right;"><div style="font:700 15px 'Space Grotesk';font-feature-settings:'tnum';">4.120</div><div style="font:600 10px Manrope;color:var(--good);">▲ %4,2 bugün</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);margin-top:11px;padding-top:10px;">
+        <span style="font:600 11px Manrope;color:var(--t45);">Kalan stok: 3 lot</span>
+        <span style="font:700 12px Manrope;color:var(--accent);">İncele →</span>
+      </div>
+    </div>
+    <!-- TRAP: aynı görsel dil -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 15px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;border-radius:12px;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;">💎</div>
+        <div style="flex:1;"><div style="font:700 13.5px Manrope;">ParlakCoin (SHINE)</div><div style="font:500 11px Manrope;color:var(--t55);">Kaldıraç x3 · %25 düşüşte pozisyon tasfiye olur</div></div>
+        <div style="text-align:right;"><div style="font:700 17px 'Space Grotesk';color:var(--good);">%40'a kadar</div><div style="font:600 10px Manrope;color:var(--t45);">12 saatte*</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);margin-top:11px;padding-top:10px;">
+        <span style="font:600 11px Manrope;color:var(--t45);">*getiri garanti değildir · stok 8 lot</span>
+        <span style="font:700 12px Manrope;color:var(--accent);">İncele →</span>
+      </div>
+    </div>
+    <!-- gayrimenkul -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 15px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;border-radius:12px;background:var(--good-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;">🏠</div>
+        <div style="flex:1;"><div style="font:700 13.5px Manrope;">Stüdyo Daire</div><div style="font:500 11px Manrope;color:var(--t55);">Kira geliri 90 KLR/gün · satışı 24 saat sürer</div></div>
+        <div style="text-align:right;"><div style="font:700 15px 'Space Grotesk';font-feature-settings:'tnum';">6.500</div><div style="font:600 10px Manrope;color:var(--t45);">KLR</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);margin-top:11px;padding-top:10px;">
+        <span style="font:600 11px Manrope;color:var(--bad);">Son 1 adet!</span>
+        <span style="font:700 12px Manrope;color:var(--accent);">İncele →</span>
+      </div>
+    </div>
+    <div style="text-align:center;font:500 11px Manrope;color:var(--t35);">Küçük yazıları oku. Kasa okumayana acımaz. 😏</div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4l Satın alma onayı -->
+<div class="dv-opt" id="4l">
+<div class="dv-olabel"><a class="dv-oid" href="#4l">4l</a>Satın alma onay modalı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Satın alma modalı" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:rgba(10,6,18,.55);z-index:1;"></div>
+  <div style="position:relative;z-index:2;margin-top:auto;background:var(--surface);border-radius:28px 28px 0 0;padding:14px 22px 44px;box-shadow:0 -20px 60px rgba(0,0,0,.35);">
+    <div style="width:40px;height:4px;border-radius:2px;background:var(--track);margin:0 auto 18px;"></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:46px;height:46px;border-radius:14px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;font-size:22px;">🪙</div>
+      <div style="flex:1;"><div style="font:700 17px 'Space Grotesk';">Bitcoin al</div><div style="font:500 12px Manrope;color:var(--t55);">1 BTC = <span style="font-feature-settings:'tnum';">4.120 KLR</span> · <span style="color:var(--good);">▲ %4,2</span></div></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-top:18px;">
+      <div style="width:40px;height:40px;border-radius:12px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font:700 20px 'Space Grotesk';color:var(--t45);">−</div>
+      <div style="text-align:center;"><div style="font:700 26px 'Space Grotesk';font-feature-settings:'tnum';">0,5 <span style="font:600 13px Manrope;color:var(--t45);">lot</span></div></div>
+      <div style="width:40px;height:40px;border-radius:12px;background:var(--acc-soft);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font:700 20px 'Space Grotesk';color:var(--accent);">+</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-top:16px;font:600 13px Manrope;">
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--t55);">Maliyet</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';">2.060 KLR</span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--t55);">İşlem ücreti (%1)</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';">21 KLR</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px dashed var(--border);padding-top:9px;"><span style="color:var(--t55);">Kalan bakiye</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';font-weight:700;">10.399 KLR</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;background:var(--acc-soft);border-radius:12px;padding:10px 12px;margin-top:14px;">
+      <div style="width:20px;height:20px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--btntext);font:700 12px Manrope;flex:none;">✓</div>
+      <span style="font:500 11.5px Manrope;color:var(--t80);">Koşulları okudum: fiyat düşerse ağlamak serbest, iade yok.</span>
+    </div>
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;margin-top:16px;">Satın al · 2.081 KLR</div>
+    <div style="text-align:center;font:600 13px Manrope;color:var(--t45);margin-top:12px;">Vazgeç</div>
+    <div style="text-align:center;font:500 10.5px Manrope;color:var(--t35);margin-top:10px;">Yatırım tavsiyesi değildir. Hiçbir şey tavsiye değildir. 😌</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4m Portföy -->
+<div class="dv-opt" id="4m">
+<div class="dv-olabel"><a class="dv-oid" href="#4m">4m</a>Portföy (+ şüpheli penaltısı)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Portföy" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 18px 0;display:flex;flex-direction:column;gap:10px;">
+    <div style="text-align:center;">
+      <div style="font:700 10.5px Manrope;letter-spacing:.16em;color:var(--t45);">NET SERVET</div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:10px;margin-top:6px;">
+        <span style="display:inline-flex;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 15px 'Space Grotesk';color:#5C4300;">K</span>
+        <span style="font:700 38px/1 'Space Grotesk';font-feature-settings:'tnum';text-shadow:var(--numshadow);">18.920</span>
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;font:600 10.5px Manrope;">
+        <span style="background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--t55);">Nakit 12.480</span>
+        <span style="background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--t55);">Yatırım 6.440</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;background:var(--bad-soft);border:1px solid var(--bad);border-radius:14px;padding:10px 14px;">
+      <span style="font-size:16px;">🤨</span>
+      <span style="flex:1;font:600 11.5px Manrope;color:var(--t80);">Şüpheli rozeti aktif: tüm kazançlarda <b style="color:var(--bad);">−%10</b></span>
+      <span style="font:700 11px 'Space Grotesk';font-feature-settings:'tnum';color:var(--bad);">2 gün</span>
+    </div>
+    <!-- mevduat -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:11px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;">🏦</div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;">Vadeli Mevduat</div><div style="font:500 11px Manrope;color:var(--t55);">500 → <b style="color:var(--good);">590 KLR</b> vadede</div></div>
+      <div style="text-align:right;"><div style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';color:var(--gold);">1g 04:12</div><div style="font:600 10px Manrope;color:var(--t45);">kaldı</div></div>
+    </div>
+    <!-- BTC -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:11px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;">🪙</div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;">BTC · 0,5 lot</div><div style="font:500 11px Manrope;color:var(--t55);">alış 2.060 · şimdi <span style="font-feature-settings:'tnum';">2.148</span></div></div>
+      <div style="display:flex;align-items:center;gap:8px;"><span style="font:700 13px 'Space Grotesk';color:var(--good);">+%4,3</span><span style="font:700 11px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:6px 13px;">Sat</span></div>
+    </div>
+    <!-- SHINE -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:11px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;">💎</div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;">SHINE · x3 kaldıraç</div><div style="font:500 11px Manrope;color:var(--t55);">alış 800 · şimdi <span style="font-feature-settings:'tnum';">496</span> · tasfiyeye %13</div></div>
+      <div style="display:flex;align-items:center;gap:8px;"><span style="font:700 13px 'Space Grotesk';color:var(--bad);">−%38</span><span style="font:700 11px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:6px 13px;">Sat</span></div>
+    </div>
+    <!-- daire -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:11px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--good-soft);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;">🏠</div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;">Stüdyo Daire</div><div style="font:500 11px Manrope;color:var(--t55);">kira <b style="color:var(--good);">+90/gün</b> · satış 24 saat sürer</div></div>
+      <span style="font:700 11px Manrope;border:1.5px solid var(--acc-border);color:var(--accent);border-radius:999px;padding:6px 13px;">İlana koy</span>
+    </div>
+    <!-- prestij -->
+    <div style="background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:11px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;">⌚</div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;color:var(--gold);">Kolex Daytona</div><div style="font:500 11px Manrope;color:var(--t55);">Prestij varlık · profilde sergileniyor</div></div>
+      <span style="font:700 10px Manrope;letter-spacing:.08em;color:var(--gold);">PRESTİJ</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-group">KUMARHANE (her temada karanlık)</div>
+
+<!-- 4n Kumarhane giriş -->
+<div class="dv-opt" id="4n">
+<div class="dv-olabel"><a class="dv-oid" href="#4n">4n</a>Kumarhane · masa kurulumu</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div data-screen-label="Kumarhane giriş" style="height:100%;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 0%,#1c0e26 0%,#0A0612 55%);color:#F4ECFA;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:78px 22px 0;display:flex;flex-direction:column;">
+    <div style="text-align:center;">
+      <div style="font:700 26px 'Space Grotesk';letter-spacing:.24em;color:#C86AF5;animation:klr-neon 2.4s infinite;">KUMARHANE</div>
+      <div style="font:500 12px Manrope;color:rgba(244,236,250,.5);margin-top:6px;">Kasa her zaman kazanır 😏 · Kalori 18+</div>
+    </div>
+    <div style="margin-top:28px;">
+      <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(244,236,250,.45);">MİKTAR</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <div style="flex:1;height:44px;border-radius:12px;border:1.5px solid rgba(244,236,250,.15);display:flex;align-items:center;justify-content:center;font:700 13px 'Space Grotesk';color:rgba(244,236,250,.6);">100</div>
+        <div style="flex:1;height:44px;border-radius:12px;border:1.5px solid rgba(244,236,250,.15);display:flex;align-items:center;justify-content:center;font:700 13px 'Space Grotesk';color:rgba(244,236,250,.6);">500</div>
+        <div style="flex:1;height:44px;border-radius:12px;background:rgba(200,106,245,.16);border:1.5px solid #C86AF5;display:flex;align-items:center;justify-content:center;font:700 13px 'Space Grotesk';color:#C86AF5;box-shadow:0 0 14px rgba(200,106,245,.35);">1.000</div>
+        <div style="flex:1;height:44px;border-radius:12px;border:1.5px solid rgba(244,236,250,.15);display:flex;align-items:center;justify-content:center;font:700 12px 'Space Grotesk';color:rgba(244,236,250,.6);">HEPSİ 🫣</div>
+      </div>
+    </div>
+    <div style="margin-top:22px;">
+      <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(244,236,250,.45);">MASADA KALMA SÜRESİ</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+        <div style="border:1.5px solid rgba(244,236,250,.15);border-radius:14px;padding:12px 14px;"><div style="font:700 15px 'Space Grotesk';">1 saat</div><div style="font:600 10.5px Manrope;color:rgba(244,236,250,.5);">0x – 2x</div></div>
+        <div style="border:1.5px solid rgba(244,236,250,.15);border-radius:14px;padding:12px 14px;"><div style="font:700 15px 'Space Grotesk';">2 saat</div><div style="font:600 10.5px Manrope;color:rgba(244,236,250,.5);">0x – 4x</div></div>
+        <div style="background:rgba(200,106,245,.16);border:1.5px solid #C86AF5;border-radius:14px;padding:12px 14px;box-shadow:0 0 14px rgba(200,106,245,.3);"><div style="font:700 15px 'Space Grotesk';color:#C86AF5;">3 saat</div><div style="font:600 10.5px Manrope;color:rgba(244,236,250,.65);">0x – 6x</div></div>
+        <div style="border:1.5px solid rgba(244,236,250,.15);border-radius:14px;padding:12px 14px;"><div style="font:700 15px 'Space Grotesk';">6 saat</div><div style="font:600 10.5px Manrope;color:rgba(244,236,250,.5);">0x – 10x 💀</div></div>
+      </div>
+    </div>
+    <div style="margin-top:22px;background:rgba(255,255,255,.04);border:1px solid rgba(244,236,250,.1);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font:600 12.5px Manrope;">
+      <div style="display:flex;justify-content:space-between;"><span style="color:rgba(244,236,250,.5);">Masaya konan</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">1.000 KLR</span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="color:rgba(244,236,250,.5);">Olası dönüş</span><span style="font-family:'Space Grotesk';font-feature-settings:'tnum';">0 – 6.000 KLR</span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="color:rgba(244,236,250,.5);">Kural</span><span style="color:rgba(244,236,250,.75);">Süre bitmeden kalkış yok</span></div>
+    </div>
+  </div>
+  <div style="padding:0 22px 40px;">
+    <div style="height:56px;border-radius:16px;background:linear-gradient(90deg,#9B3FD4,#C86AF5);color:#14081C;display:flex;align-items:center;justify-content:center;font:800 15px Manrope;box-shadow:0 0 24px rgba(200,106,245,.5);">Masaya Otur 🎰</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4o Aktif oturum -->
+<div class="dv-opt" id="4o">
+<div class="dv-olabel"><a class="dv-oid" href="#4o">4o</a>Kumarhane · aktif oturum</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div data-screen-label="Kumarhane aktif oturum" style="height:100%;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 30%,#1c0e26 0%,#0A0612 60%);color:#F4ECFA;font-family:Manrope,sans-serif;">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 26px;text-align:center;">
+    <div style="font:700 11px Manrope;letter-spacing:.2em;color:#C86AF5;animation:klr-pulse 1.6s infinite;">MASADASIN</div>
+    <div style="width:230px;height:230px;border-radius:50%;margin-top:22px;background:conic-gradient(#C86AF5 0 152deg,rgba(255,255,255,.07) 152deg 360deg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(200,106,245,.25);">
+      <div style="width:206px;height:206px;border-radius:50%;background:#0F0818;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div style="font:700 42px 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.01em;">01:23:45</div>
+        <div style="font:600 11px Manrope;color:rgba(244,236,250,.45);margin-top:4px;">3 saatlik masada</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:26px;background:rgba(255,255,255,.04);border:1px solid rgba(244,236,250,.12);border-radius:999px;padding:10px 20px;">
+      <span style="display:inline-flex;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 11px 'Space Grotesk';color:#5C4300;">K</span>
+      <span style="font:700 16px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">1.000 KLR</span>
+      <span style="font:600 12px Manrope;color:rgba(244,236,250,.5);">masada</span>
+    </div>
+    <div style="font:500 12.5px/1.6 Manrope;color:rgba(244,236,250,.5);margin-top:22px;max-width:250px;">Masadan kalkamazsın. Kasa kararını veriyor; sen bu arada su iç. 💧</div>
+  </div>
+  <div style="padding:0 22px 40px;">
+    <div style="height:52px;border-radius:16px;border:1.5px solid rgba(244,236,250,.15);display:flex;align-items:center;justify-content:center;font:700 14px Manrope;color:rgba(244,236,250,.4);">Sonuç 02:00'de açıklanır</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4p Sonuç reveal -->
+<div class="dv-opt" id="4p">
+<div class="dv-olabel"><a class="dv-oid" href="#4p">4p</a>Kumarhane · sonuç anı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div data-screen-label="Kumarhane sonuç" style="height:100%;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 35%,#2a1338 0%,#0A0612 65%);color:#F4ECFA;font-family:Manrope,sans-serif;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:100px;left:14%;animation:klr-fall 2s linear infinite;"><span style="display:inline-flex;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 9px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="position:absolute;top:90px;left:44%;animation:klr-fall 2.6s linear .7s infinite;"><span style="display:inline-flex;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 12px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="position:absolute;top:110px;right:12%;animation:klr-fall 2.2s linear 1.2s infinite;"><span style="display:inline-flex;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 8px 'Space Grotesk';color:#5C4300;">K</span></div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 26px;text-align:center;">
+    <div style="font:700 11px Manrope;letter-spacing:.24em;color:rgba(244,236,250,.5);">SONUÇ</div>
+    <div style="font:800 96px/1 'Space Grotesk';letter-spacing:-.04em;margin-top:10px;color:#C86AF5;text-shadow:0 0 50px rgba(200,106,245,.7);animation:klr-pop .7s cubic-bezier(.2,1.6,.4,1);">x3,2</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:18px;font:700 20px 'Space Grotesk';font-feature-settings:'tnum';">
+      <span style="color:rgba(244,236,250,.45);">1.000</span>
+      <span style="color:#C86AF5;">→</span>
+      <span style="color:#F2C14E;text-shadow:0 0 20px rgba(242,193,78,.5);">3.200 KLR</span>
+    </div>
+    <div style="font:600 12.5px Manrope;color:rgba(244,236,250,.55);margin-top:14px;">Kasa bu sefer kaybetti. Kimseye söyleme. 🤫</div>
+    <div style="display:flex;gap:8px;margin-top:8px;font:600 10.5px Manrope;color:rgba(244,236,250,.4);">
+      <span style="border:1px solid rgba(244,236,250,.15);border-radius:999px;padding:4px 10px;">3 saat masada</span>
+      <span style="border:1px solid rgba(244,236,250,.15);border-radius:999px;padding:4px 10px;">şans: %8'lik dilim</span>
+    </div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:10px;">
+    <div style="height:56px;border-radius:16px;background:linear-gradient(90deg,#D9A514,#F2C14E);color:#3A2C00;display:flex;align-items:center;justify-content:center;font:800 15px Manrope;box-shadow:0 0 24px rgba(242,193,78,.45);">Topla · 3.200 KLR</div>
+    <div style="height:52px;border-radius:16px;border:1.5px solid rgba(200,106,245,.4);display:flex;align-items:center;justify-content:center;font:700 14px Manrope;color:#C86AF5;">Bir el daha 😈</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-group">DÜKKÂN & SOSYAL</div>
+
+<!-- 4q Dükkân -->
+<div class="dv-opt" id="4q">
+<div class="dv-olabel"><a class="dv-oid" href="#4q">4q</a>Dükkân</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Dükkân" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 18px 0;display:flex;flex-direction:column;gap:11px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="font:700 22px 'Space Grotesk';">Dükkân</div>
+      <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 12px;">
+        <span style="display:inline-flex;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 9px 'Space Grotesk';color:#5C4300;">K</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';">12.480</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);">
+        <div style="font-size:26px;">🧢</div>
+        <div style="font:700 12.5px Manrope;margin-top:8px;">Dandik Şapka</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">Avatarına takılır. O kadar.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span style="font:700 13px 'Space Grotesk';color:var(--gold);">50 KLR</span><span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 11px;">Al</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);">
+        <div style="font-size:26px;">🖼</div>
+        <div style="font:700 12.5px Manrope;margin-top:8px;">Neon Çerçeve</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">Liderlikte parlarsın.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span style="font:700 13px 'Space Grotesk';color:var(--gold);">300 KLR</span><span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 11px;">Al</span></div>
+      </div>
+      <div style="background:var(--surface);border:1.5px solid var(--acc-border);border-radius:16px;padding:13px;box-shadow:var(--shadow);">
+        <div style="font-size:26px;">🤖</div>
+        <div style="font:700 12.5px Manrope;margin-top:8px;">AI Avatar</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">Foto yükle, efsaneye dönüş.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span style="font:700 13px 'Space Grotesk';color:var(--gold);">750 KLR</span><span style="font:700 10.5px Manrope;background:var(--accent);color:var(--btntext);border-radius:999px;padding:5px 11px;">Al</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);">
+        <div style="font-size:26px;">🍔</div>
+        <div style="font:700 12.5px Manrope;margin-top:8px;">Cheat Day</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">1 gün kalori affı. Vicdan hariç.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span style="font:700 13px 'Space Grotesk';color:var(--gold);">1.000 KLR</span><span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 11px;">Al</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);">
+        <div style="font-size:26px;">💣</div>
+        <div style="font:700 12.5px Manrope;margin-top:8px;">Tatlı Bombası</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">Hedef seç → 24 saatte fotolu tatlı loglamak zorunda.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span style="font:700 13px 'Space Grotesk';color:var(--gold);">500 KLR</span><span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 11px;">Hedef seç</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);">
+        <div style="font-size:26px;">🛡</div>
+        <div style="font:700 12.5px Manrope;margin-top:8px;">Streak Kalkanı</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">1 kaçamağı affeder. Otomatik devreye girer.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span style="font:700 13px 'Space Grotesk';color:var(--gold);">400 KLR</span><span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 11px;">Al</span></div>
+      </div>
+    </div>
+    <div style="text-align:center;font:500 11px Manrope;color:var(--t35);">Kozmetikler kilo verdirmez ama havan yerinde olur. ✨</div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4r Tatlı bombası kurbanı -->
+<div class="dv-opt" id="4r">
+<div class="dv-olabel"><a class="dv-oid" href="#4r">4r</a>Tatlı Bombası · kurban tarafı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Tatlı bombası kurban" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;padding:104px 24px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
+    <div style="font-size:56px;animation:klr-pop .6s ease-out;">💣🍰</div>
+    <div style="font:700 22px 'Space Grotesk';margin-top:14px;">Deniz sana Tatlı Bombası attı!</div>
+    <div style="font:500 13px/1.55 Manrope;color:var(--t80);margin-top:8px;max-width:270px;">24 saat içinde <b>fotoğraflı bir tatlı</b> loglamak zorundasın. Kalorisi güne sayılır. Kurallar acımasız.</div>
+    <div style="margin-top:22px;background:var(--surface);border:1.5px solid var(--bad);border-radius:20px;padding:16px 26px;">
+      <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--bad);">KALAN SÜRE</div>
+      <div style="font:700 40px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;animation:klr-pulse 2s infinite;">23:41:12</div>
+      <div style="font:500 11px Manrope;color:var(--t45);margin-top:2px;">süre dolarsa: −200 KLR + rezillik</div>
+    </div>
+    <div style="width:100%;border:1.5px dashed var(--dash);border-radius:18px;padding:16px;display:flex;align-items:center;gap:12px;margin-top:16px;">
+      <div style="width:48px;height:48px;border-radius:12px;background:var(--ph);flex:none;"></div>
+      <div style="flex:1;text-align:left;"><div style="font:700 13px Manrope;">Tatlı fotoğrafı</div><div style="font:500 11px Manrope;color:var(--t45);">Isırık alınmış olması tercih sebebi.</div></div>
+    </div>
+  </div>
+  <div style="padding:0 22px 40px;display:flex;flex-direction:column;gap:10px;">
+    <div style="height:54px;border-radius:16px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 15px Manrope;">Tatlıyı logla 🍰</div>
+    <div style="height:52px;border-radius:16px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font:700 14px Manrope;color:var(--t45);">İtiraz et (işe yaramaz)</div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4s Liderlik -->
+<div class="dv-opt" id="4s">
+<div class="dv-olabel"><a class="dv-oid" href="#4s">4s</a>Liderlik tablosu</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Liderlik" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 18px 0;display:flex;flex-direction:column;gap:11px;">
+    <div style="font:700 22px 'Space Grotesk';">Liderlik</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:16px;padding:12px 14px;">
+        <div style="font-size:22px;">🏆</div>
+        <div style="font:700 12px Manrope;margin-top:6px;color:var(--gold);">Kilorin Şampiyonu</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">Sezon sonu en yüksek net servet</div>
+      </div>
+      <div style="background:var(--acc-soft);border:1px solid var(--acc-border);border-radius:16px;padding:12px 14px;">
+        <div style="font-size:22px;">🦋</div>
+        <div style="font:700 12px Manrope;margin-top:6px;color:var(--accent);">Dönüşüm Şampiyonu</div>
+        <div style="font:500 10.5px Manrope;color:var(--t55);">En yüksek % kilo kaybı</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);">
+        <span style="font:700 13px 'Space Grotesk';color:var(--gold);width:18px;">1</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--gold-bg);border:1.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';color:var(--gold);">D</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Deniz 👑</div><div style="font:500 10.5px Manrope;color:var(--t55);">🔥 21 gün</div></div>
+        <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';">24.150</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);">
+        <span style="font:700 13px 'Space Grotesk';color:var(--t45);width:18px;">2</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';color:var(--accent);">B</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Burak <span title="Şüpheli">🤨</span></div><div style="font:500 10.5px Manrope;color:var(--t55);">🔥 3 gün · kazançlarda −%10</div></div>
+        <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';">21.800</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--acc-soft);">
+        <span style="font:700 13px 'Space Grotesk';color:var(--accent);width:18px;">3</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';color:var(--accent);">E</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Emre (sen)</div><div style="font:500 10.5px Manrope;color:var(--t55);">🔥 12 gün</div></div>
+        <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';">18.920</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);">
+        <span style="font:700 13px 'Space Grotesk';color:var(--t45);width:18px;">4</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--track);display:flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';color:var(--t55);">S</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Seda</div><div style="font:500 10.5px Manrope;color:var(--t55);">🔥 8 gün</div></div>
+        <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';">14.230</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:12px 14px;">
+        <span style="font:700 13px 'Space Grotesk';color:var(--t45);width:18px;">5</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--track);display:flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';color:var(--t55);">C</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Can</div><div style="font:500 10.5px Manrope;color:var(--t55);">🕯 0 gün · kumarhanede son 4.000</div></div>
+        <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';">2.940</div>
+      </div>
+    </div>
+    <div style="text-align:center;font:500 11px Manrope;color:var(--t35);">Sıralama net servete göre · tartılar admin onaylı.</div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4t Profil -->
+<div class="dv-opt" id="4t">
+<div class="dv-olabel"><a class="dv-oid" href="#4t">4t</a>Profil</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Profil" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 18px 0;display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:64px;height:64px;border-radius:20px;background:var(--ph);border:2px solid var(--accent);position:relative;flex:none;"><span style="position:absolute;bottom:-6px;right:-6px;font-size:18px;">🧢</span></div>
+      <div style="flex:1;">
+        <div style="font:700 18px 'Space Grotesk';">Emre</div>
+        <div style="font:500 11.5px Manrope;color:var(--t55);">AI Avatar · Sezon 2 · 🔥 12 gün</div>
+        <div style="display:flex;gap:5px;margin-top:6px;font-size:13px;"><span title="İlk tartı">🥇</span><span title="7 gün streak">🔥</span><span title="İlk yatırım">📈</span><span title="Kumar borcu ödendi">🎰</span></div>
+      </div>
+      <div style="text-align:right;"><div style="font:700 16px 'Space Grotesk';font-feature-settings:'tnum';">18.920</div><div style="font:600 10px Manrope;color:var(--gold);">NET SERVET</div></div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <div style="flex:1;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:14px;padding:10px 12px;text-align:center;"><div style="font-size:20px;">⌚</div><div style="font:700 10.5px Manrope;color:var(--gold);margin-top:3px;">Kolex</div></div>
+      <div style="flex:1;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:14px;padding:10px 12px;text-align:center;"><div style="font-size:20px;">🏠</div><div style="font:700 10.5px Manrope;color:var(--gold);margin-top:3px;">Stüdyo</div></div>
+      <div style="flex:1;border:1.5px dashed var(--dash);border-radius:14px;padding:10px 12px;text-align:center;"><div style="font-size:20px;opacity:.35;">🏎</div><div style="font:600 10.5px Manrope;color:var(--t35);margin-top:3px;">boş vitrin</div></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);">KİLO İLERLEMESİ</span>
+        <span style="font:700 12.5px 'Space Grotesk';font-feature-settings:'tnum';color:var(--good);">86,4 → 84,0 kg</span>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:7px;height:74px;margin-top:12px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:64px;border-radius:6px 6px 0 0;background:var(--track);"></div><span style="font:600 9px Manrope;color:var(--t35);">H1</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:58px;border-radius:6px 6px 0 0;background:var(--track);"></div><span style="font:600 9px Manrope;color:var(--t35);">H2</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:54px;border-radius:6px 6px 0 0;background:var(--grad);opacity:.55;"></div><span style="font:600 9px Manrope;color:var(--t35);">H3</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:48px;border-radius:6px 6px 0 0;background:var(--grad);opacity:.75;"></div><span style="font:600 9px Manrope;color:var(--t35);">H4</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:42px;border-radius:6px 6px 0 0;background:var(--grad);"></div><span style="font:600 9px Manrope;color:var(--accent);">H5</span></div>
+      </div>
+      <div style="font:500 11px Manrope;color:var(--t55);margin-top:8px;">Hedefe kalan: <b>6,0 kg</b> · tempo: haftada 0,6 kg</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);">FOTO ZAMAN TÜNELİ</span>
+        <span style="font:600 10px Manrope;color:var(--t35);">🔒 sadece gruba görünür</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:11px;">
+        <div style="flex:1;aspect-ratio:3/4;border-radius:10px;background:var(--ph);"></div>
+        <div style="flex:1;aspect-ratio:3/4;border-radius:10px;background:var(--ph);"></div>
+        <div style="flex:1;aspect-ratio:3/4;border-radius:10px;background:var(--ph);"></div>
+        <div style="flex:1;aspect-ratio:3/4;border-radius:10px;border:1.5px dashed var(--dash);display:flex;align-items:center;justify-content:center;font:700 16px 'Space Grotesk';color:var(--accent);">+</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- 4u Admin paneli -->
+<div class="dv-opt" id="4u">
+<div class="dv-olabel"><a class="dv-oid" href="#4u">4u</a>Admin paneli</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="394px,852px">
+<div class="klr" data-theme="{{ theme }}" data-screen-label="Admin paneli" style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:70px 18px 0;display:flex;flex-direction:column;gap:11px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="font:700 22px 'Space Grotesk';">Admin</div>
+      <span style="font:700 9.5px Manrope;letter-spacing:.1em;background:var(--gold-bg);border:1px solid var(--gold-border);color:var(--gold);border-radius:999px;padding:4px 10px;">KASA SENSİN</span>
+    </div>
+    <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);margin-top:2px;">ÜYE ONAYLARI · 1</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:11px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--acc-soft);display:flex;align-items:center;justify-content:center;font:700 15px 'Space Grotesk';color:var(--accent);">M</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Merve · 31</div><div style="font:500 11px Manrope;color:var(--t55);">72,0 → 66,0 kg · 1.620 kcal/gün</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <div style="flex:1;height:40px;border-radius:11px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 12.5px Manrope;">Onayla</div>
+        <div style="flex:1;height:40px;border-radius:11px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font:700 12.5px Manrope;color:var(--t55);">Reddet</div>
+      </div>
+    </div>
+    <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);margin-top:2px;">TARTI İTİRAZLARI · 1</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;">
+      <div style="width:48px;height:48px;border-radius:12px;background:var(--ph);flex:none;"></div>
+      <div style="flex:1;"><div style="font:700 13px Manrope;">Burak · Salı tartısı</div><div style="font:500 11px Manrope;color:var(--t55);">Fotoğraf bulanık, ekran okunmuyor 🤨</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <span style="font:700 10.5px Manrope;background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:5px 12px;text-align:center;">Kabul</span>
+        <span style="font:700 10.5px Manrope;background:var(--bad-soft);color:var(--bad);border-radius:999px;padding:5px 12px;text-align:center;">Reddet</span>
+      </div>
+    </div>
+    <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:var(--t45);margin-top:2px;">SEZON AYARLARI</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div style="display:flex;justify-content:space-between;font:600 12px Manrope;"><span style="color:var(--t55);">Sezon uzunluğu</span><span style="font:700 12.5px 'Space Grotesk';color:var(--accent);">12 hafta</span></div>
+        <div style="height:8px;border-radius:999px;background:var(--track);margin-top:9px;position:relative;">
+          <div style="width:25%;height:100%;border-radius:999px;background:var(--grad);"></div>
+          <div style="position:absolute;left:25%;top:-5px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);transform:translateX(-9px);box-shadow:var(--shadow);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font:600 9.5px Manrope;color:var(--t35);margin-top:5px;"><span>8</span><span>24 hafta</span></div>
+      </div>
+      <div>
+        <div style="font:600 12px Manrope;color:var(--t55);">Tartı günleri (haftada 2)</div>
+        <div style="display:flex;gap:6px;margin-top:9px;">
+          <span style="font:700 11px Manrope;border:1.5px solid var(--border);color:var(--t45);border-radius:999px;padding:6px 11px;">Pzt</span>
+          <span style="font:700 11px Manrope;background:var(--acc-soft);border:1.5px solid var(--accent);color:var(--accent);border-radius:999px;padding:6px 11px;">Sal</span>
+          <span style="font:700 11px Manrope;border:1.5px solid var(--border);color:var(--t45);border-radius:999px;padding:6px 11px;">Çar</span>
+          <span style="font:700 11px Manrope;border:1.5px solid var(--border);color:var(--t45);border-radius:999px;padding:6px 11px;">Per</span>
+          <span style="font:700 11px Manrope;background:var(--acc-soft);border:1.5px solid var(--accent);color:var(--accent);border-radius:999px;padding:6px 11px;">Cum</span>
+        </div>
+      </div>
+      <div style="height:46px;border-radius:13px;background:var(--accent);color:var(--btntext);display:flex;align-items:center;justify-content:center;font:700 13.5px Manrope;">Ayarları kaydet</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:var(--tabbg);border-top:1px solid var(--border);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--track);"></div><span style="font:600 10px Manrope;color:var(--t45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:var(--accent);"></div><span style="font:700 10px Manrope;color:var(--accent);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Sonraki: "ödül anını daha da abart" · "piyasa kartlarına yeni fırsat tipleri ekle" · "onboarding'e canlı geçiş prototipi yap"</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Turn <a class="dv-oid" href="#t2">2</a>'nin light mode karşılıkları</span></div>
+<p class="dv-sub">Aynı düzen, aydınlık zemin. Altın coin sabit; vurgu renkleri okunabilirlik için bir ton koyulaştırıldı.</p>
+<div class="dv-opts">
+
+<!-- ═══════════ 3a: YEŞİL LIGHT ═══════════ -->
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Yeşil light (2a'nın karşılığı)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#F4F7F1;color:#17210F;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:radial-gradient(ellipse,rgba(72,168,42,.12),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(23,33,15,.45);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(72,168,42,.12);color:#39821C;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 2px 10px rgba(184,134,11,.35);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#B8860B;margin-top:6px;">KLR <span style="color:#39821C;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid rgba(23,33,15,.08);border-radius:18px;padding:14px 16px;box-shadow:0 1px 3px rgba(23,33,15,.05);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(23,33,15,.45);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#39821C;">1.240</span><span style="color:rgba(23,33,15,.4);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(23,33,15,.08);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#39821C,#5FC33A);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(23,33,15,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#FFFFFF;border:1px solid rgba(72,168,42,.35);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(23,33,15,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#39821C;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(23,33,15,.45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#E4EDDC,#E4EDDC 4px,#D8E5CC 4px,#D8E5CC 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(23,33,15,.45);">foto eklendi</span></div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(72,168,42,.35);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(23,33,15,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#39821C;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(23,33,15,.45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#E4EDDC,#E4EDDC 4px,#D8E5CC 4px,#D8E5CC 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(23,33,15,.45);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(23,33,15,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(23,33,15,.8);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#39821C;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(23,33,15,.45);">kalori gir</span>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(23,33,15,.08);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(23,33,15,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#39821C;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(23,33,15,.45);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(23,33,15,.35);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.22),rgba(242,193,78,.08));border:1px solid rgba(184,134,11,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#8A6508;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(23,33,15,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#8A6508;">05:12:44</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(255,255,255,.92);border-top:1px solid rgba(23,33,15,.08);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#39821C;"></div><span style="font:700 10px Manrope;color:#39821C;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(23,33,15,.18);"></div><span style="font:600 10px Manrope;color:rgba(23,33,15,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(23,33,15,.18);"></div><span style="font:600 10px Manrope;color:rgba(23,33,15,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(23,33,15,.18);"></div><span style="font:600 10px Manrope;color:rgba(23,33,15,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(23,33,15,.18);"></div><span style="font:600 10px Manrope;color:rgba(23,33,15,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- ═══════════ 3b: TURKUAZ LIGHT ═══════════ -->
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Turkuaz light (2b'nin karşılığı)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#F1F7F6;color:#0E211E;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:radial-gradient(ellipse,rgba(26,158,140,.12),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(14,33,30,.45);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(26,158,140,.12);color:#0F7A6B;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 2px 10px rgba(184,134,11,.35);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#B8860B;margin-top:6px;">KLR <span style="color:#0F7A6B;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid rgba(14,33,30,.08);border-radius:18px;padding:14px 16px;box-shadow:0 1px 3px rgba(14,33,30,.05);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(14,33,30,.45);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#0F7A6B;">1.240</span><span style="color:rgba(14,33,30,.4);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(14,33,30,.08);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#0F7A6B,#2BBFA9);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(14,33,30,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#FFFFFF;border:1px solid rgba(26,158,140,.35);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(14,33,30,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#0F7A6B;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(14,33,30,.45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#DCEDEA,#DCEDEA 4px,#CFE5E1 4px,#CFE5E1 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(14,33,30,.45);">foto eklendi</span></div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(26,158,140,.35);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(14,33,30,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#0F7A6B;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(14,33,30,.45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#DCEDEA,#DCEDEA 4px,#CFE5E1 4px,#CFE5E1 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(14,33,30,.45);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(14,33,30,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(14,33,30,.8);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#0F7A6B;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(14,33,30,.45);">kalori gir</span>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(14,33,30,.08);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(14,33,30,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#0F7A6B;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(14,33,30,.45);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(14,33,30,.35);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.22),rgba(242,193,78,.08));border:1px solid rgba(184,134,11,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#8A6508;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(14,33,30,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#8A6508;">05:12:44</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(255,255,255,.92);border-top:1px solid rgba(14,33,30,.08);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#0F7A6B;"></div><span style="font:700 10px Manrope;color:#0F7A6B;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(14,33,30,.18);"></div><span style="font:600 10px Manrope;color:rgba(14,33,30,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(14,33,30,.18);"></div><span style="font:600 10px Manrope;color:rgba(14,33,30,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(14,33,30,.18);"></div><span style="font:600 10px Manrope;color:rgba(14,33,30,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(14,33,30,.18);"></div><span style="font:600 10px Manrope;color:rgba(14,33,30,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- ═══════════ 3c: LİLA LIGHT ═══════════ -->
+<div class="dv-opt" id="3c">
+<div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>Lila light (2c'nin karşılığı)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#F5F3F9;color:#1B1426;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:radial-gradient(ellipse,rgba(122,82,214,.12),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(27,20,38,.45);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(122,82,214,.12);color:#6A42C8;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 2px 10px rgba(184,134,11,.35);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#B8860B;margin-top:6px;">KLR <span style="color:#6A42C8;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid rgba(27,20,38,.08);border-radius:18px;padding:14px 16px;box-shadow:0 1px 3px rgba(27,20,38,.05);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(27,20,38,.45);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#6A42C8;">1.240</span><span style="color:rgba(27,20,38,.4);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(27,20,38,.08);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#6A42C8,#9C74EE);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(27,20,38,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#FFFFFF;border:1px solid rgba(122,82,214,.35);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(27,20,38,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#6A42C8;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(27,20,38,.45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#E7E0F2,#E7E0F2 4px,#DDD3EC 4px,#DDD3EC 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(27,20,38,.45);">foto eklendi</span></div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(122,82,214,.35);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(27,20,38,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#6A42C8;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(27,20,38,.45);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#E7E0F2,#E7E0F2 4px,#DDD3EC 4px,#DDD3EC 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(27,20,38,.45);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(27,20,38,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(27,20,38,.8);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#6A42C8;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(27,20,38,.45);">kalori gir</span>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(27,20,38,.08);border-radius:16px;padding:12px 14px;box-shadow:0 1px 3px rgba(27,20,38,.05);">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#6A42C8;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(27,20,38,.45);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(27,20,38,.35);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.22),rgba(242,193,78,.08));border:1px solid rgba(184,134,11,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#8A6508;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(27,20,38,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#8A6508;">05:12:44</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(255,255,255,.92);border-top:1px solid rgba(27,20,38,.08);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#6A42C8;"></div><span style="font:700 10px Manrope;color:#6A42C8;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(27,20,38,.18);"></div><span style="font:600 10px Manrope;color:rgba(27,20,38,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(27,20,38,.18);"></div><span style="font:600 10px Manrope;color:rgba(27,20,38,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(27,20,38,.18);"></div><span style="font:600 10px Manrope;color:rgba(27,20,38,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(27,20,38,.18);"></div><span style="font:600 10px Manrope;color:rgba(27,20,38,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Sonraki: "<a class="dv-oid" href="#3b">3b</a> ile tüm ekranları yap" · "dark + light ikisini de sistemde tut" · "kumarhane her modda karanlık kalsın"</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname"><a class="dv-oid" href="#1a">1a</a> gövdesi + <a class="dv-oid" href="#1b">1b</a> dev hero, üst kısım çerçevesiz — 3 renk</span></div>
+<p class="dv-sub">Bakiye artık kartsız, ekranın kendisinde; sadece hafif glow. Aynı tasarım üç vurgu renginde.</p>
+<div class="dv-opts">
+
+<!-- ═══════════ 2a: NEON YEŞİL ═══════════ -->
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Neon yeşil (1a'nın rengi)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#0B0F0A;color:#EDF2E8;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <!-- hero balance, frameless -->
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:radial-gradient(ellipse,rgba(121,245,90,.16),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(237,242,232,.5);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(121,245,90,.12);color:#79F55A;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 0 18px rgba(242,193,78,.6);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;text-shadow:0 0 30px rgba(121,245,90,.3);">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#F2C14E;margin-top:6px;">KLR <span style="color:#79F55A;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <!-- calorie progress -->
+    <div style="background:#131A11;border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 16px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(237,242,232,.5);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#79F55A;">1.240</span><span style="color:rgba(237,242,232,.45);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.07);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#3F8F2C,#79F55A);box-shadow:0 0 10px rgba(121,245,90,.6);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(237,242,232,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <!-- meals 2x2 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#131A11;border:1px solid rgba(121,245,90,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#79F55A;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(237,242,232,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#1d2a18,#1d2a18 4px,#16200f 4px,#16200f 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(237,242,232,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:#131A11;border:1px solid rgba(121,245,90,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#79F55A;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(237,242,232,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#1d2a18,#1d2a18 4px,#16200f 4px,#16200f 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(237,242,232,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(237,242,232,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(237,242,232,.85);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#79F55A;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(237,242,232,.45);">kalori gir</span>
+      </div>
+      <div style="background:#131A11;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#79F55A;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(237,242,232,.5);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(237,242,232,.4);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <!-- day-end reward teaser -->
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.14),rgba(242,193,78,.04));border:1px solid rgba(242,193,78,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#F2C14E;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(237,242,232,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">05:12:44</div>
+    </div>
+  </div>
+  <!-- tab bar -->
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(11,15,10,.9);border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#79F55A;box-shadow:0 0 10px rgba(121,245,90,.7);"></div><span style="font:700 10px Manrope;color:#79F55A;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- ═══════════ 2b: TURKUAZ ═══════════ -->
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Turkuaz — daha serin, "premium arcade"</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#070F0F;color:#E8F4F2;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:radial-gradient(ellipse,rgba(74,232,212,.15),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(232,244,242,.5);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(74,232,212,.12);color:#4AE8D4;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 0 18px rgba(242,193,78,.6);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;text-shadow:0 0 30px rgba(74,232,212,.3);">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#F2C14E;margin-top:6px;">KLR <span style="color:#4AE8D4;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <div style="background:#0F1A19;border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 16px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(232,244,242,.5);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#4AE8D4;">1.240</span><span style="color:rgba(232,244,242,.45);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.07);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#1F8A7A,#4AE8D4);box-shadow:0 0 10px rgba(74,232,212,.6);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(232,244,242,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#0F1A19;border:1px solid rgba(74,232,212,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#4AE8D4;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(232,244,242,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#152a27,#152a27 4px,#0f201d 4px,#0f201d 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(232,244,242,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:#0F1A19;border:1px solid rgba(74,232,212,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#4AE8D4;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(232,244,242,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#152a27,#152a27 4px,#0f201d 4px,#0f201d 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(232,244,242,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(232,244,242,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(232,244,242,.85);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#4AE8D4;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(232,244,242,.45);">kalori gir</span>
+      </div>
+      <div style="background:#0F1A19;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#4AE8D4;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(232,244,242,.5);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(232,244,242,.4);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.14),rgba(242,193,78,.04));border:1px solid rgba(242,193,78,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#F2C14E;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(232,244,242,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">05:12:44</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(7,15,15,.9);border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#4AE8D4;box-shadow:0 0 10px rgba(74,232,212,.7);"></div><span style="font:700 10px Manrope;color:#4AE8D4;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(232,244,242,.22);"></div><span style="font:600 10px Manrope;color:rgba(232,244,242,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(232,244,242,.22);"></div><span style="font:600 10px Manrope;color:rgba(232,244,242,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(232,244,242,.22);"></div><span style="font:600 10px Manrope;color:rgba(232,244,242,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(232,244,242,.22);"></div><span style="font:600 10px Manrope;color:rgba(232,244,242,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- ═══════════ 2c: LİLA ═══════════ -->
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Lila — mor neon, altınla en zengin kontrast</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#0D0A14;color:#F0ECF6;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 18px 0;display:flex;flex-direction:column;gap:13px;">
+    <div style="text-align:center;padding:6px 0 4px;position:relative;">
+      <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:190px;background:radial-gradient(ellipse,rgba(177,140,255,.16),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(240,236,246,.5);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(177,140,255,.13);color:#B18CFF;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 0 18px rgba(242,193,78,.6);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;text-shadow:0 0 30px rgba(177,140,255,.32);">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#F2C14E;margin-top:6px;">KLR <span style="color:#B18CFF;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <div style="background:#161122;border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 16px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(240,236,246,.5);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#B18CFF;">1.240</span><span style="color:rgba(240,236,246,.45);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.07);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#6A4BB8,#B18CFF);box-shadow:0 0 10px rgba(177,140,255,.6);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(240,236,246,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#161122;border:1px solid rgba(177,140,255,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#B18CFF;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(240,236,246,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#221a33,#221a33 4px,#1a1329 4px,#1a1329 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(240,236,246,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:#161122;border:1px solid rgba(177,140,255,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#B18CFF;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(240,236,246,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#221a33,#221a33 4px,#1a1329 4px,#1a1329 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(240,236,246,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(240,236,246,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(240,236,246,.85);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#B18CFF;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(240,236,246,.45);">kalori gir</span>
+      </div>
+      <div style="background:#161122;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#B18CFF;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(240,236,246,.5);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(240,236,246,.4);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.14),rgba(242,193,78,.04));border:1px solid rgba(242,193,78,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#F2C14E;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(240,236,246,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">05:12:44</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(13,10,20,.9);border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#B18CFF;box-shadow:0 0 10px rgba(177,140,255,.7);"></div><span style="font:700 10px Manrope;color:#B18CFF;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(240,236,246,.22);"></div><span style="font:600 10px Manrope;color:rgba(240,236,246,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(240,236,246,.22);"></div><span style="font:600 10px Manrope;color:rgba(240,236,246,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(240,236,246,.22);"></div><span style="font:600 10px Manrope;color:rgba(240,236,246,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(240,236,246,.22);"></div><span style="font:600 10px Manrope;color:rgba(240,236,246,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Sonraki: "<a class="dv-oid" href="#2b">2b</a> ile tüm ekranları yap" · "heroyu biraz küçült" · "başka renk dene"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Ana ekran — 3 görsel yön</span></div>
+<p class="dv-sub">Aynı içerik, üç farklı palet + kompozisyon. Beğendiğin yönü seç; tüm uygulamayı (10 ekran) o dilde kuracağım. Altın/KLR rengi üçünde de sabit.</p>
+<div class="dv-opts">
+
+<!-- ═══════════ 1a: TOKSİK NEON (yeşil) ═══════════ -->
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Toksik Neon — yeşil vurgu, kart ağırlıklı, arcade enerjisi</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#0B0F0A;color:#EDF2E8;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:66px 18px 0;display:flex;flex-direction:column;gap:14px;">
+    <!-- header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2a3d24,#131A11);border:1.5px solid #79F55A;display:flex;align-items:center;justify-content:center;font:700 14px 'Space Grotesk';color:#79F55A;">E</div>
+        <div><div style="font:700 14px Manrope;">Selam, Emre</div><div style="font:500 11px Manrope;color:rgba(237,242,232,.5);">Sezon 2 · 5. hafta</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;background:#131A11;border:1px solid rgba(121,245,90,.25);border-radius:999px;padding:6px 12px;">
+        <span style="font-size:13px;">🔥</span><span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';">12 gün</span>
+        <span style="font:700 11px 'Space Grotesk';color:#79F55A;background:rgba(121,245,90,.12);border-radius:6px;padding:2px 6px;">x1,24</span>
+      </div>
+    </div>
+    <!-- balance -->
+    <div style="background:linear-gradient(160deg,#141C10,#0E1408);border:1px solid rgba(121,245,90,.2);border-radius:20px;padding:18px 18px 16px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(121,245,90,.14),transparent 70%);"></div>
+      <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(237,242,232,.5);">BAKİYE</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
+        <span style="display:inline-flex;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 15px 'Space Grotesk';color:#5C4300;box-shadow:0 0 12px rgba(242,193,78,.55);">K</span>
+        <span style="font:700 34px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.01em;">12.480</span>
+        <span style="font:700 15px 'Space Grotesk';color:#F2C14E;align-self:flex-end;padding-bottom:3px;">KLR</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-top:10px;font:600 11.5px Manrope;">
+        <span style="color:#79F55A;">▲ +246 bugün</span>
+        <span style="color:rgba(237,242,232,.5);">Net servet: 18.920 KLR</span>
+      </div>
+    </div>
+    <!-- calorie progress -->
+    <div style="background:#131A11;border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 16px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(237,242,232,.5);">BUGÜNKÜ KALORİ</span>
+        <span style="font:700 13px 'Space Grotesk';font-feature-settings:'tnum';"><span style="color:#79F55A;">1.240</span><span style="color:rgba(237,242,232,.45);"> / 1.850 kcal</span></span>
+      </div>
+      <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.07);margin-top:10px;overflow:hidden;">
+        <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#3F8F2C,#79F55A);box-shadow:0 0 10px rgba(121,245,90,.6);"></div>
+      </div>
+      <div style="font:500 11.5px Manrope;color:rgba(237,242,232,.55);margin-top:8px;">610 kcal marjın var — akşamı abartma 😏</div>
+    </div>
+    <!-- meals 2x2 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#131A11;border:1px solid rgba(121,245,90,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Kahvaltı</span><span style="font:600 10px Manrope;color:#79F55A;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">420 <span style="font:600 11px Manrope;color:rgba(237,242,232,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#1d2a18,#1d2a18 4px,#16200f 4px,#16200f 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(237,242,232,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:#131A11;border:1px solid rgba(121,245,90,.3);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Öğle</span><span style="font:600 10px Manrope;color:#79F55A;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">560 <span style="font:600 11px Manrope;color:rgba(237,242,232,.5);">kcal</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;"><div style="width:28px;height:28px;border-radius:8px;background:repeating-linear-gradient(45deg,#1d2a18,#1d2a18 4px,#16200f 4px,#16200f 8px);"></div><span style="font:500 10.5px Manrope;color:rgba(237,242,232,.5);">foto eklendi</span></div>
+      </div>
+      <div style="background:transparent;border:1.5px dashed rgba(237,242,232,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:88px;">
+        <span style="font:700 12.5px Manrope;color:rgba(237,242,232,.85);">Akşam</span>
+        <span style="font:700 20px 'Space Grotesk';color:#79F55A;">+</span>
+        <span style="font:500 10.5px Manrope;color:rgba(237,242,232,.45);">kalori gir</span>
+      </div>
+      <div style="background:#131A11;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="font:700 12.5px Manrope;">Snack</span><span style="font:600 10px Manrope;color:#79F55A;">✓</span></div>
+        <div style="font:700 17px 'Space Grotesk';font-feature-settings:'tnum';margin-top:4px;">260 <span style="font:600 11px Manrope;color:rgba(237,242,232,.5);">kcal</span></div>
+        <div style="font:500 10.5px Manrope;color:rgba(237,242,232,.4);margin-top:10px;">foto yok</div>
+      </div>
+    </div>
+    <!-- day-end reward teaser -->
+    <div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(242,193,78,.14),rgba(242,193,78,.04));border:1px solid rgba(242,193,78,.35);border-radius:16px;padding:12px 16px;">
+      <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;">K</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#F2C14E;">Gün sonu ödülü hazırlanıyor</div><div style="font:500 11px Manrope;color:rgba(237,242,232,.55);">Tahmini: 220 KLR + streak bonusu</div></div>
+      <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">05:12:44</div>
+    </div>
+  </div>
+  <!-- tab bar -->
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(11,15,10,.9);border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:#79F55A;box-shadow:0 0 10px rgba(121,245,90,.7);"></div><span style="font:700 10px Manrope;color:#79F55A;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:6px;background:rgba(237,242,232,.22);"></div><span style="font:600 10px Manrope;color:rgba(237,242,232,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- ═══════════ 1b: GECE KULÜBÜ (magenta) ═══════════ -->
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Gece Kulübü — magenta neon, dev bakiye hero, kumarhane DNA'sı</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#120B14;color:#F4ECF6;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:66px 18px 0;display:flex;flex-direction:column;">
+    <!-- hero balance -->
+    <div style="text-align:center;padding:10px 0 18px;position:relative;">
+      <div style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:260px;height:180px;background:radial-gradient(ellipse,rgba(240,74,168,.22),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;">
+        <span style="font:700 10.5px Manrope;letter-spacing:.18em;color:rgba(244,236,246,.5);">BAKİYE</span>
+        <span style="display:inline-flex;align-items:center;white-space:nowrap;font:700 10px Manrope;background:rgba(240,74,168,.15);color:#F04AA8;border-radius:999px;padding:3px 9px;">🔥 12 gün · x1,24</span>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;">
+        <span style="display:inline-flex;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 19px 'Space Grotesk';color:#5C4300;box-shadow:0 0 18px rgba(242,193,78,.6);">K</span>
+        <span style="font:700 48px/1 'Space Grotesk';font-feature-settings:'tnum';letter-spacing:-.02em;text-shadow:0 0 30px rgba(240,74,168,.35);">12.480</span>
+      </div>
+      <div style="font:700 13px 'Space Grotesk';color:#F2C14E;margin-top:6px;">KLR <span style="color:#7CE38B;font:600 12px Manrope;margin-left:8px;">▲ +246 bugün</span></div>
+    </div>
+    <!-- calorie ring row -->
+    <div style="display:flex;gap:12px;align-items:center;background:#1B1120;border:1px solid rgba(240,74,168,.22);border-radius:20px;padding:14px 16px;">
+      <div style="width:64px;height:64px;border-radius:50%;background:conic-gradient(#F04AA8 0 241deg,rgba(255,255,255,.08) 241deg 360deg);display:flex;align-items:center;justify-content:center;flex:none;">
+        <div style="width:50px;height:50px;border-radius:50%;background:#1B1120;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <span style="font:700 13px 'Space Grotesk';">%67</span>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';">1.240 <span style="color:rgba(244,236,246,.45);font:600 12px Manrope;">/ 1.850 kcal</span></div>
+        <div style="font:500 11.5px Manrope;color:rgba(244,236,246,.55);margin-top:3px;">610 kcal marjın var. Kasa seni izliyor 😏</div>
+      </div>
+      <div style="text-align:right;"><div style="font:700 10px Manrope;color:rgba(244,236,246,.45);letter-spacing:.1em;">ÖDÜLE</div><div style="font:700 15px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">05:12</div></div>
+    </div>
+    <!-- meal rows -->
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#1B1120;border-radius:14px;padding:11px 14px;border-left:3px solid #F04AA8;">
+        <div style="width:34px;height:34px;border-radius:10px;background:repeating-linear-gradient(45deg,#2a1a30,#2a1a30 4px,#221327 4px,#221327 8px);flex:none;"></div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Kahvaltı</div><div style="font:500 10.5px Manrope;color:rgba(244,236,246,.45);">08:40 · fotolu</div></div>
+        <div style="font:700 15px 'Space Grotesk';font-feature-settings:'tnum';">420 <span style="font:600 10.5px Manrope;color:rgba(244,236,246,.45);">kcal</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#1B1120;border-radius:14px;padding:11px 14px;border-left:3px solid #F04AA8;">
+        <div style="width:34px;height:34px;border-radius:10px;background:repeating-linear-gradient(45deg,#2a1a30,#2a1a30 4px,#221327 4px,#221327 8px);flex:none;"></div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Öğle</div><div style="font:500 10.5px Manrope;color:rgba(244,236,246,.45);">13:15 · fotolu</div></div>
+        <div style="font:700 15px 'Space Grotesk';font-feature-settings:'tnum';">560 <span style="font:600 10.5px Manrope;color:rgba(244,236,246,.45);">kcal</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:transparent;border:1.5px dashed rgba(244,236,246,.25);border-radius:14px;padding:11px 14px;">
+        <div style="width:34px;height:34px;border-radius:10px;border:1.5px dashed rgba(244,236,246,.3);display:flex;align-items:center;justify-content:center;color:#F04AA8;font:700 18px 'Space Grotesk';flex:none;">+</div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Akşam</div><div style="font:500 10.5px Manrope;color:rgba(244,236,246,.45);">henüz loglanmadı</div></div>
+        <div style="font:700 12px Manrope;color:#F04AA8;">Gir →</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#1B1120;border-radius:14px;padding:11px 14px;border-left:3px solid rgba(240,74,168,.35);">
+        <div style="width:34px;height:34px;border-radius:10px;background:#241530;flex:none;"></div>
+        <div style="flex:1;"><div style="font:700 13px Manrope;">Snack</div><div style="font:500 10.5px Manrope;color:rgba(244,236,246,.45);">16:20 · foto yok</div></div>
+        <div style="font:700 15px 'Space Grotesk';font-feature-settings:'tnum';">260 <span style="font:600 10.5px Manrope;color:rgba(244,236,246,.45);">kcal</span></div>
+      </div>
+    </div>
+    <!-- casino teaser -->
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#1a0d20,#2a0d24);border:1px solid rgba(240,74,168,.4);border-radius:16px;padding:12px 16px;">
+      <span style="font-size:18px;">🎰</span>
+      <div style="flex:1;"><div style="font:700 12.5px Manrope;color:#F04AA8;">Kumarhane açık</div><div style="font:500 10.5px Manrope;color:rgba(244,236,246,.5);">Kasa her zaman kazanır 😏</div></div>
+      <div style="font:700 11px Manrope;color:#F4ECF6;background:rgba(240,74,168,.25);border-radius:999px;padding:6px 12px;">Gir</div>
+    </div>
+  </div>
+  <!-- tab bar -->
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(18,11,20,.92);border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:50%;background:#F04AA8;box-shadow:0 0 10px rgba(240,74,168,.7);"></div><span style="font:700 10px Manrope;color:#F04AA8;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:50%;background:rgba(244,236,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(244,236,246,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:50%;background:rgba(244,236,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(244,236,246,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:50%;background:rgba(244,236,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(244,236,246,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:20px;border-radius:50%;background:rgba(244,236,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(244,236,246,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<!-- ═══════════ 1c: TERMİNAL (elektrik mavisi) ═══════════ -->
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Terminal — elektrik mavisi, yoğun fintech dashboard, ticker hissi</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="394px,852px">
+<div style="height:100%;display:flex;flex-direction:column;background:#070C14;color:#E8EEF6;font-family:Manrope,sans-serif;">
+  <div style="flex:1;overflow:hidden;padding:62px 0 0;display:flex;flex-direction:column;">
+    <!-- ticker strip -->
+    <div style="display:flex;gap:18px;padding:8px 18px;border-bottom:1px solid rgba(255,255,255,.07);font:600 10.5px 'Space Grotesk';font-feature-settings:'tnum';white-space:nowrap;overflow:hidden;color:rgba(232,238,246,.6);">
+      <span>BTC <span style="color:#5CE08A;">+4,2%</span></span>
+      <span>GRUP-HİSSE <span style="color:#F06A6A;">-1,8%</span></span>
+      <span>MEVDUAT <span style="color:#4AA8F0;">%18/3g</span></span>
+      <span>VİTRİN <span style="color:#F2C14E;">02:14:09</span></span>
+    </div>
+    <div style="padding:14px 18px 0;display:flex;flex-direction:column;gap:12px;">
+      <!-- balance row -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font:700 10.5px Manrope;letter-spacing:.14em;color:rgba(232,238,246,.5);">BAKİYE</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+            <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 13px 'Space Grotesk';color:#5C4300;box-shadow:0 0 10px rgba(242,193,78,.5);">K</span>
+            <span style="font:700 30px/1 'Space Grotesk';font-feature-settings:'tnum';">12.480</span>
+            <span style="font:700 13px 'Space Grotesk';color:#F2C14E;">KLR</span>
+          </div>
+          <div style="font:600 11px Manrope;color:#5CE08A;margin-top:4px;">▲ +246 bugün · net servet 18.920</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:56px;background:#0E1626;border:1px solid rgba(74,168,240,.25);border-radius:12px;padding:8px 12px;">
+          <div style="font:700 15px/1.2 'Space Grotesk';font-feature-settings:'tnum';white-space:nowrap;">🔥12</div>
+          <div style="font:700 10.5px/1.2 'Space Grotesk';color:#4AA8F0;white-space:nowrap;">x1,24</div>
+        </div>
+      </div>
+      <!-- calorie bar, thin -->
+      <div style="background:#0E1626;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font:700 11px 'Space Grotesk';font-feature-settings:'tnum';">
+          <span style="color:rgba(232,238,246,.55);letter-spacing:.1em;">KALORİ</span>
+          <span><span style="color:#4AA8F0;">1.240</span><span style="color:rgba(232,238,246,.4);">/1.850</span> <span style="color:rgba(232,238,246,.4);">· marj 610</span></span>
+        </div>
+        <div style="height:6px;border-radius:999px;background:rgba(255,255,255,.08);margin-top:8px;position:relative;">
+          <div style="width:67%;height:100%;border-radius:999px;background:linear-gradient(90deg,#2360A8,#4AA8F0);box-shadow:0 0 8px rgba(74,168,240,.6);"></div>
+          <div style="position:absolute;left:67%;top:-3px;width:2px;height:12px;background:#E8EEF6;border-radius:2px;"></div>
+        </div>
+      </div>
+      <!-- meals: compact table -->
+      <div style="background:#0E1626;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.05);">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:26px;height:26px;border-radius:7px;background:repeating-linear-gradient(45deg,#15233a,#15233a 4px,#101b2e 4px,#101b2e 8px);"></div><span style="font:700 12.5px Manrope;">Kahvaltı</span></div>
+          <span style="font:600 10px Manrope;color:#5CE08A;">FOTO ✓</span>
+          <span style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';min-width:64px;text-align:right;">420 kcal</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.05);">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:26px;height:26px;border-radius:7px;background:repeating-linear-gradient(45deg,#15233a,#15233a 4px,#101b2e 4px,#101b2e 8px);"></div><span style="font:700 12.5px Manrope;">Öğle</span></div>
+          <span style="font:600 10px Manrope;color:#5CE08A;">FOTO ✓</span>
+          <span style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';min-width:64px;text-align:right;">560 kcal</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(74,168,240,.06);">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:26px;height:26px;border-radius:7px;border:1.5px dashed rgba(74,168,240,.5);display:flex;align-items:center;justify-content:center;color:#4AA8F0;font:700 14px 'Space Grotesk';">+</div><span style="font:700 12.5px Manrope;">Akşam</span></div>
+          <span style="font:700 11.5px Manrope;color:#4AA8F0;">KALORİ GİR →</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 14px;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:26px;height:26px;border-radius:7px;background:#131f33;"></div><span style="font:700 12.5px Manrope;">Snack</span></div>
+          <span style="font:600 10px Manrope;color:rgba(232,238,246,.35);">FOTO —</span>
+          <span style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';min-width:64px;text-align:right;">260 kcal</span>
+        </div>
+      </div>
+      <!-- reward -->
+      <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,rgba(242,193,78,.12),transparent);border:1px solid rgba(242,193,78,.3);border-radius:14px;padding:11px 14px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="display:inline-flex;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2C14E 55%,#B8860B);align-items:center;justify-content:center;font:800 12px 'Space Grotesk';color:#5C4300;">K</span>
+          <div><div style="font:700 12px Manrope;color:#F2C14E;">Gün sonu ödülü</div><div style="font:500 10.5px Manrope;color:rgba(232,238,246,.5);">Temel 220 + streak %12</div></div>
+        </div>
+        <span style="font:700 14px 'Space Grotesk';font-feature-settings:'tnum';color:#F2C14E;">05:12:44</span>
+      </div>
+      <!-- weigh-in banner -->
+      <div style="display:flex;align-items:center;gap:10px;background:#0E1626;border:1px solid rgba(92,224,138,.3);border-radius:14px;padding:11px 14px;">
+        <span style="font-size:16px;">⚖️</span>
+        <div style="flex:1;"><div style="font:700 12px Manrope;color:#5CE08A;">Yarın tartı günü</div><div style="font:500 10.5px Manrope;color:rgba(232,238,246,.5);">Beklenen: 84,2 kg · ödül 300 KLR</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- tab bar -->
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:10px 8px 26px;background:rgba(7,12,20,.92);border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:4px;border-radius:2px;background:#4AA8F0;box-shadow:0 0 8px rgba(74,168,240,.8);"></div><span style="font:700 10px Manrope;color:#4AA8F0;">Ana</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:4px;border-radius:2px;background:rgba(232,238,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(232,238,246,.45);">Piyasa</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:4px;border-radius:2px;background:rgba(232,238,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(232,238,246,.45);">Portföy</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:4px;border-radius:2px;background:rgba(232,238,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(232,238,246,.45);">Sosyal</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:20px;height:4px;border-radius:2px;background:rgba(232,238,246,.2);"></div><span style="font:600 10px Manrope;color:rgba(232,238,246,.45);">Profil</span></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Sonraki adım: "<a class="dv-oid" href="#1a">1a</a> ile devam et, tüm ekranları yap" · "<a class="dv-oid" href="#1b">1b</a>'nin hero'su + <a class="dv-oid" href="#1a">1a</a>'nın yeşili" · "başka yönler dene"</p>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Görünüm&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.props.theme ?? 'light';
+    return { theme, isDark: theme === 'dark' };
+  }
+}
+</script>
+</body>
+</html>
