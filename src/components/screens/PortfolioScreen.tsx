@@ -86,22 +86,25 @@ export function PortfolioScreen({
   );
   const [delayed, setDelayed] = useState(initial?.valued.some((v) => v.delayed) ?? false);
   const [pending, setPending] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(loadError);
+  const [error, setError] = useState<string | null>(loadError && `Portföy yüklenemedi: ${loadError}`);
+
+  async function refresh() {
+    const res = await getApi<PortfolioData>('/api/portfolio');
+    if (res.ok) {
+      setData(res.data);
+      setHoldings(res.data.valued.map(toDisplay));
+      setDelayed(res.data.valued.some((v) => v.delayed));
+      setError(null);
+    } else {
+      setError(`Portföy yüklenemedi: ${res.error}`);
+    }
+  }
 
   // Refresh with live prices after mount (server render may be seconds old).
   useEffect(() => {
     if (demo) return;
-    (async () => {
-      const res = await getApi<PortfolioData>('/api/portfolio');
-      if (res.ok) {
-        setData(res.data);
-        setHoldings(res.data.valued.map(toDisplay));
-        setDelayed(res.data.valued.some((v) => v.delayed));
-        setError(null);
-      } else {
-        setError(res.error);
-      }
-    })();
+    void refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [demo]);
 
   const net = data?.net ?? (demo ? demoPortfolio.net : 0);
@@ -112,15 +115,23 @@ export function PortfolioScreen({
     setPending(id);
     const res = await postApi('/api/market/sell', { positionId: id });
     setPending(null);
-    if (res.ok) setHoldings((h) => h.filter((x) => x.id !== id));
-    else setError(res.error);
+    if (res.ok) {
+      await refresh(); // resync value + cash together
+    } else {
+      setError(`Satış başarısız: ${res.error}`);
+      await refresh(); // list may be stale (e.g. sold in another tab)
+    }
   }
   async function list(id: string) {
     setPending(id);
     const res = await postApi('/api/market/list', { positionId: id });
     setPending(null);
-    if (res.ok) setHoldings((h) => h.map((x) => (x.id === id ? { ...x, subtitle: 'ilana konuldu · 24 saat' } : x)));
-    else setError(res.error);
+    if (res.ok) {
+      await refresh();
+    } else {
+      setError(`İlan başarısız: ${res.error}`);
+      await refresh();
+    }
   }
 
   return (
@@ -143,7 +154,7 @@ export function PortfolioScreen({
 
       {error && (
         <div className="bg-bad-soft border border-bad rounded-[14px] text-center" style={{ padding: '10px 14px', fontSize: 12, fontWeight: 600 }}>
-          Portföy güncellenemedi: {error}
+          {error}
         </div>
       )}
 
