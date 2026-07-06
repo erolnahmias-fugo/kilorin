@@ -69,11 +69,14 @@ export function PortfolioScreen({
   suspicious,
   initial = null,
   loadError = null,
+  ownerName = null,
 }: {
   suspicious: boolean;
   /** Server-rendered portfolio; null = demo mode (design preview only). */
   initial?: PortfolioData | null;
   loadError?: string | null;
+  /** Whose portfolio — demo-login links share one browser session, so make identity explicit. */
+  ownerName?: string | null;
 }) {
   const demo = initial === null && loadError === null;
   const [data, setData] = useState<PortfolioData | null>(initial);
@@ -122,7 +125,9 @@ export function PortfolioScreen({
   return (
     <div className="flex-1 flex flex-col gap-[10px]" style={{ padding: '70px 18px 0' }}>
       <div className="text-center">
-        <div className="text-t45" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.16em' }}>NET SERVET</div>
+        <div className="text-t45" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.16em' }}>
+          NET SERVET{ownerName ? ` · ${ownerName.toUpperCase()}` : ''}
+        </div>
         <div className="flex justify-center items-center gap-[10px]" style={{ marginTop: 6 }}>
           <Coin size={30} />
           <span className="font-display tnum num-glow" style={{ fontSize: 38, lineHeight: 1, fontWeight: 700 }}>{formatKLR(net)}</span>

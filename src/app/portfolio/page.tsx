@@ -23,17 +23,29 @@ export default async function PortfolioPage({
     );
   }
 
+  const admin = createAdminClient();
   let initial = null;
   let loadError: string | null = null;
+  let ownerName: string | null = null;
   try {
-    initial = await computeNetWorth(createAdminClient(), ctx.member.id);
+    const [nw, userRow] = await Promise.all([
+      computeNetWorth(admin, ctx.member.id),
+      admin.from('users').select('display_name').eq('id', ctx.member.user_id).maybeSingle(),
+    ]);
+    initial = nw;
+    ownerName = (userRow.data as { display_name: string | null } | null)?.display_name ?? null;
   } catch (err) {
     loadError = err instanceof Error ? err.message : 'bilinmeyen hata';
   }
 
   return (
     <AppShell>
-      <PortfolioScreen suspicious={!!ctx.member.suspicious} initial={initial} loadError={loadError} />
+      <PortfolioScreen
+        suspicious={!!ctx.member.suspicious}
+        initial={initial}
+        loadError={loadError}
+        ownerName={ownerName}
+      />
     </AppShell>
   );
 }
