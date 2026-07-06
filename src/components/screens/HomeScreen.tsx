@@ -64,9 +64,9 @@ export function HomeScreen({
         </div>
         <div className="font-display text-gold" style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>
           KLR{' '}
-          {!broken && (
-            <span className="text-accent" style={{ fontFamily: 'var(--font-manrope)', fontSize: 12, fontWeight: 600, marginLeft: 8 }}>
-              ▲ +{formatKLR(data.todayDelta)} bugün
+          {!broken && data.todayDelta !== 0 && (
+            <span className={data.todayDelta > 0 ? 'text-accent' : 'text-bad'} style={{ fontFamily: 'var(--font-manrope)', fontSize: 12, fontWeight: 600, marginLeft: 8 }}>
+              {data.todayDelta > 0 ? '▲ +' : '▼ −'}{formatKLR(Math.abs(data.todayDelta))} bugün
             </span>
           )}
         </div>

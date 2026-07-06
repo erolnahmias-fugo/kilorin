@@ -61,7 +61,8 @@ function toDisplay(p: ValuedPosition): DisplayHolding {
   }
   return {
     id: p.id, emoji, title: p.title ?? p.symbol ?? 'Pozisyon', kind: 'tradable', pnlPct: p.pnlPct,
-    subtitle: `alış ${formatKLR(p.entry_price ?? p.amount_klr)} · şimdi ${formatKLR(p.currentValue)}${p.liquidated ? ' · tasfiye' : ''}`,
+    // Both sides are position totals in KLR (cost basis vs current value) — not the per-lot price.
+    subtitle: `alış ${formatKLR(p.amount_klr)} · şimdi ${formatKLR(p.currentValue)}${p.liquidated ? ' · tasfiye' : ''}`,
   };
 }
 

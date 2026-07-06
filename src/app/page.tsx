@@ -3,7 +3,7 @@ import { HomeScreen, type HomeState } from '@/components/screens/HomeScreen';
 import { demoHome, MEAL_LABELS, type HomeView, type MealKey } from '@/components/demo';
 import { redirect } from 'next/navigation';
 import { getSessionContext } from '@/lib/game/session';
-import { createServerSupabase } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { STREAK_STEP, STREAK_CAP_DAYS } from '@/lib/domain/constants';
 import { istanbulDateStr, dayCloseInstant } from '@/lib/time';
 import type { Tables } from '@/lib/supabase/database.types';
@@ -16,15 +16,22 @@ async function loadHome(): Promise<HomeView> {
     const member = ctx.member;
     if (!member || member.status !== 'approved') return demoHome;
 
-    const supabase = await createServerSupabase();
+    const admin = createAdminClient();
     const today = istanbulDateStr();
+    const dayStartISO = dayCloseInstant(today).minus({ days: 1 }).plus({ seconds: 1 }).toISO();
 
-    const [logRes, balRes] = await Promise.all([
-      supabase.from('daily_logs').select('*').eq('member_id', member.id).eq('log_date', today).maybeSingle(),
-      supabase.from('member_balances').select('balance').eq('member_id', member.id).maybeSingle(),
+    // Balance from the same ledger RPC the portfolio uses — one source of truth.
+    const [logRes, balRes, todayLedgerRes] = await Promise.all([
+      admin.from('daily_logs').select('*').eq('member_id', member.id).eq('log_date', today).maybeSingle(),
+      admin.rpc('member_balance', { p_member: member.id }),
+      admin.from('ledger').select('amount').eq('member_id', member.id).gte('created_at', dayStartISO ?? ''),
     ]);
     const log = logRes.data as Tables<'daily_logs'> | null;
-    const bal = balRes.data as Tables<'member_balances'> | null;
+    const balance = (balRes.data as number | null) ?? 0;
+    const todayDelta = ((todayLedgerRes.data as { amount: number }[] | null) ?? []).reduce(
+      (s, r) => s + r.amount,
+      0,
+    );
 
     const kcal: Record<MealKey, number> = {
       breakfast: log?.breakfast_kcal ?? 0,
@@ -47,8 +54,8 @@ async function loadHome(): Promise<HomeView> {
 
     const streak = member.streak_days ?? 0;
     return {
-      balance: bal?.balance ?? demoHome.balance,
-      todayDelta: demoHome.todayDelta,
+      balance,
+      todayDelta,
       streakDays: streak,
       multiplier: 1 + STREAK_STEP * Math.min(streak, STREAK_CAP_DAYS),
       todayKcal: meals.reduce((s, m) => s + m.kcal, 0),
