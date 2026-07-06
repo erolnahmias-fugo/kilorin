@@ -14,6 +14,7 @@ interface ValuedPosition {
   symbol?: string | null;
   amount_klr: number;
   lots?: number | null;
+  rate?: number | null;
   leverage?: number | null;
   entry_price?: number | null;
   rent_per_day?: number | null;
@@ -43,9 +44,11 @@ const EMOJI: Record<string, string> = {
 function toDisplay(p: ValuedPosition): DisplayHolding {
   const emoji = EMOJI[p.type] ?? '💠';
   if (p.type === 'interest') {
+    // "vadede" = payout at maturity (principal × (1+rate)), not today's accrual.
+    const maturity = Math.round(p.amount_klr * (1 + Number(p.rate ?? 0)));
     return {
       id: p.id, emoji, title: p.title ?? 'Vadeli Mevduat', kind: 'locked', gold: true,
-      subtitle: `${formatKLR(p.amount_klr)} → ${formatKLR(p.currentValue)} KLR vadede`,
+      subtitle: `${formatKLR(p.amount_klr)} → ${formatKLR(maturity)} KLR vadede`,
       lockEndMs: p.lock_end ? Date.parse(p.lock_end) : undefined,
     };
   }
