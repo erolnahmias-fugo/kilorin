@@ -103,3 +103,14 @@ regions). When a feed is unreachable the price service falls back to a determini
 **simulated** price and flags it as **delayed** — the UI shows a **"fiyat gecikmeli"**
 indicator. The game stays fully playable on simulated prices; stocks and funds are
 always simulated since they have no free key‑less feed.
+
+## Tarayıcıdan seed (sandbox ağı kısıtlıysa)
+
+Deploy sonrası veritabanını doldurmak için tek adres yeter:
+
+```
+https://<uygulaman>.vercel.app/api/admin/seed?secret=<CRON_SECRET>
+```
+
+`npm run seed` ile birebir aynı işi yapar (idempotent). Gerçek sezon başlayınca
+bu route'u silin ya da `CRON_SECRET`'ı değiştirin.

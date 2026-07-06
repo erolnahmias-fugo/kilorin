@@ -145,7 +145,7 @@ async function ensureAuthUser(email: string, displayName: string, existing: Map<
   return data.user.id;
 }
 
-async function main(): Promise<void> {
+export async function runSeed(): Promise<void> {
   console.log('▶ Kilorin seed — target:', process.env.NEXT_PUBLIC_SUPABASE_URL);
 
   // ── 1. Auth users (idempotent via listUsers) ─────────────────────────────
@@ -479,7 +479,11 @@ async function main(): Promise<void> {
   console.log('');
 }
 
-main().catch((err) => {
-  console.error('\n✗ Seed failed:', err instanceof Error ? err.message : err);
-  process.exit(1);
-});
+// Auto-run only when executed as a script (`npm run seed`), not when imported
+// by the /api/admin/seed route.
+if (process.argv[1]?.includes('seed')) {
+  runSeed().catch((err) => {
+    console.error('\n✗ Seed failed:', err instanceof Error ? err.message : err);
+    process.exit(1);
+  });
+}
