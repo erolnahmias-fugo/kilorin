@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed": "tsx scripts/seed.ts",
-    "db:types": "supabase gen types typescript --linked > src/lib/supabase/database.types.ts"
+    "db:types": "supabase gen types typescript --linked > src/lib/supabase/database.types.ts",
+    "dev:auto": "node scripts/dev-auto.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
