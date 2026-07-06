@@ -1,0 +1,27 @@
+{
+  "name": "Kilorin",
+  "short_name": "Kilorin",
+  "description": "Arkadaşlarınla kilo ver, KLR bas, hepsini kumarda kaybet.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0a14",
+  "theme_color": "#0d0a14",
+  "lang": "tr",
+  "categories": ["health", "lifestyle", "games"],
+  "icons": [
+    {
+      "src": "/icons/coin.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

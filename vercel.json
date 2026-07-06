@@ -1,0 +1,8 @@
+{
+  "crons": [
+    { "path": "/api/cron/day-close", "schedule": "5 21 * * *" },
+    { "path": "/api/cron/showcase", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/maturities", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/dessert-bombs", "schedule": "*/15 * * * *" }
+  ]
+}

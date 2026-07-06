@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Kilorin design tokens — ported from the "3c lila" Claude Design export.
+ * Light is the default; [data-theme="dark"] re-themes. Casino screens opt out
+ * with their own fixed dark-neon palette (see .casino-root).
+ */
+:root,
+[data-theme='light'] {
+  --bg: #f5f3f9;
+  --surface: #ffffff;
+  --text: #1b1426;
+  --t80: rgba(27, 20, 38, 0.8);
+  --t55: rgba(27, 20, 38, 0.55);
+  --t45: rgba(27, 20, 38, 0.45);
+  --t35: rgba(27, 20, 38, 0.35);
+  --border: rgba(27, 20, 38, 0.08);
+  --dash: rgba(27, 20, 38, 0.25);
+  --accent: #6a42c8;
+  --btntext: #ffffff;
+  --acc-soft: rgba(122, 82, 214, 0.12);
+  --acc-border: rgba(122, 82, 214, 0.35);
+  --grad: linear-gradient(90deg, #6a42c8, #9c74ee);
+  --track: rgba(27, 20, 38, 0.08);
+  --ph: repeating-linear-gradient(45deg, #e7e0f2, #e7e0f2 4px, #ddd3ec 4px, #ddd3ec 8px);
+  --shadow: 0 1px 3px rgba(27, 20, 38, 0.05);
+  --gold: #8a6508;
+  --gold-border: rgba(184, 134, 11, 0.35);
+  --gold-bg: linear-gradient(90deg, rgba(242, 193, 78, 0.22), rgba(242, 193, 78, 0.08));
+  --good: #1e8a4c;
+  --good-soft: rgba(30, 138, 76, 0.12);
+  --bad: #c43d3d;
+  --bad-soft: rgba(196, 61, 61, 0.1);
+  --tabbg: rgba(255, 255, 255, 0.92);
+  --glow: radial-gradient(ellipse, rgba(122, 82, 214, 0.12), transparent 70%);
+  --numshadow: none;
+}
+
+[data-theme='dark'] {
+  --bg: #0d0a14;
+  --surface: #161122;
+  --text: #f0ecf6;
+  --t80: rgba(240, 236, 246, 0.85);
+  --t55: rgba(240, 236, 246, 0.55);
+  --t45: rgba(240, 236, 246, 0.45);
+  --t35: rgba(240, 236, 246, 0.35);
+  --border: rgba(255, 255, 255, 0.07);
+  --dash: rgba(240, 236, 246, 0.25);
+  --accent: #b18cff;
+  --btntext: #14101f;
+  --acc-soft: rgba(177, 140, 255, 0.13);
+  --acc-border: rgba(177, 140, 255, 0.3);
+  --grad: linear-gradient(90deg, #6a4bb8, #b18cff);
+  --track: rgba(255, 255, 255, 0.08);
+  --ph: repeating-linear-gradient(45deg, #221a33, #221a33 4px, #1a1329 4px, #1a1329 8px);
+  --shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --gold: #f2c14e;
+  --gold-border: rgba(242, 193, 78, 0.35);
+  --gold-bg: linear-gradient(90deg, rgba(242, 193, 78, 0.14), rgba(242, 193, 78, 0.04));
+  --good: #7ce38b;
+  --good-soft: rgba(124, 227, 139, 0.12);
+  --bad: #f06a6a;
+  --bad-soft: rgba(240, 106, 106, 0.12);
+  --tabbg: rgba(13, 10, 20, 0.92);
+  --glow: radial-gradient(ellipse, rgba(177, 140, 255, 0.16), transparent 70%);
+  --numshadow: 0 0 30px rgba(177, 140, 255, 0.32);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  overscroll-behavior-y: none;
+}
+
+/* Tabular figures for all the balances / counters / timers. */
+.tnum {
+  font-feature-settings: 'tnum';
+}
+
+.font-display {
+  font-family: var(--font-space), system-ui, sans-serif;
+}
+
+.num-glow {
+  text-shadow: var(--numshadow);
+}
+
+/* App shell: a phone-width column centered on larger screens. */
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  min-height: 100svh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}

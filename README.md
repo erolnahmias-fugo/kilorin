@@ -1,25 +1,81 @@
-# CODING AGENTS: READ THIS FIRST
+# Kilorin 🪙
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+**Arcade fintech oyunu** — kapalı arkadaş grupları için multiplayer kilo verme oyunu
+ve sanal ekonomi. Oyuncular günlük kalorilerini loglar, hedefin altında kaldıkça
+**Kilorin (KLR)** kazanır ve bu parayla dönemsel yatırım fırsatları, kumarhane ve
+dükkân üzerinden rekabetçi bir ekonomi oyunu oynar. Ciddi bir diyet uygulaması değil;
+eğlenceli, hafif kumarbaz bir arkadaş grubu enerjisi — *"Kasa her zaman kazanır 😏"*.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+Türkçe, mobile‑first bir **PWA**. Tema light/dark ("3c lila": lila zemin + altın coin).
 
-## What you should do — IMPORTANT
+## The concept — "arcade fintech"
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+Losing weight is the way you *earn* money in a game that otherwise feels like a
+trading app. Every mechanic borrows a fintech gesture and pins it to one honest
+economic anchor — **+10% expected value per 24h locked** — so deposits, leveraged
+crypto, funds and even the casino all share the same fair EV, and the fun comes from
+variance, timing and reading the fine print (some market offers are deliberate traps).
+Balances are shown everywhere as **KLR** with a gold K‑coin; the whole thing is a
+scoreboard for a friend group's season.
 
-**Read `project/Kilorin.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Features
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+- **Onboarding with real calorie math** — Mifflin‑St Jeor BMR → TDEE → the daily
+  target needed to hit your goal by season end, with a safety floor + "too aggressive"
+  warning.
+- **Daily log & day‑close** — four meal cards, a slot‑machine reward moment with a
+  base + streak‑bonus breakdown, streak multiplier up to ×1.60, and an auto‑consuming
+  **Streak Kalkanı** so one slip doesn't nuke your streak.
+- **Weigh‑ins twice a week** — expected‑vs‑actual with a +0.4 kg tolerance, +300 KLR,
+  and admin photo review.
+- **Suspicion badge 🤨** — cross‑checks your logged eating against real weight change;
+  under‑report and every earning takes a ‑10% cut until you weigh in clean.
+- **Market (Piyasa)** — a 2–5 offer showcase that refreshes 3–4×/day: fixed deposits
+  (with hidden trap variants), leveraged crypto/stock/fx/fund on **live prices**, real
+  estate with 24h listed sales, and prestige cars & watches.
+- **Casino (Kumarhane)** — 1/2/3/6h tables, a bounded heavy‑tail 0–10× multiplier with
+  EV pinned to the anchor, dramatic server‑side reveal.
+- **Shop (Dükkân)** — cosmetics, Cheat Day, AI Avatar, and the **Tatlı Bombası** you
+  can throw at a friend (log a dessert in 24h or pay up).
+- **Leaderboard & trophies** — net‑worth ranking; season‑end **Kilorin Şampiyonu**
+  (richest) and **Dönüşüm Şampiyonu** (biggest transformation).
+- **PWA + web‑push** notifications; everything runs on Europe/Istanbul time.
 
-## About the design files
+## Stack
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+Next.js 15 (App Router) · React 19 · Supabase (Postgres + RLS, Auth, Storage,
+Realtime) · Tailwind CSS · Vercel + Vercel Cron · Luxon · web‑push · Zod.
+Pure game logic lives in `src/lib/domain/`; the database schema, RPCs and RLS in
+`supabase/migrations/`; balances are **always derived from an append‑only ledger**.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## Quickstart
 
-## Bundle contents
+```bash
+npm install
+cp .env.example .env.local        # fill SUPABASE_SERVICE_ROLE_KEY, CRON_SECRET, VAPID keys
+npm run seed                      # demo season "Ofis Obezleri 🏢", invite code K4F7
+npm run dev                       # http://localhost:3000
+```
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Kilorin: Arcade fintech oyunu` project files (HTML prototypes, assets, components)
+Full instructions — env vars, migrations, magic‑link login, Vercel deploy — are in
+**[docs/SETUP.md](./docs/SETUP.md)**.
+
+## Documentation
+
+- **[docs/GAME-RULES.md](./docs/GAME-RULES.md)** — every rule, exactly as implemented.
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — stack, data model, RLS, price
+  service, cron schedules.
+- **[docs/SETUP.md](./docs/SETUP.md)** — install, configure, seed, run, deploy.
+- **[docs/DESIGN-BUNDLE.md](./docs/DESIGN-BUNDLE.md)** — the original Claude Design
+  handoff (prototype in `project/`, transcripts in `chats/`).
+
+## Screenshots
+
+_Coming soon — see the 21‑screen prototype in `project/Kilorin.dc.html` (screens
+4a–4u, "3c lila")._
+
+## Medical disclaimer
+
+**Kilorin bir oyundur; tıbbi/medikal tavsiye vermez.** Kalori hedefleri ve tahminleri
+oyun amaçlıdır. Beslenme veya sağlıkla ilgili kararlar için bir sağlık profesyoneline
+danışın.

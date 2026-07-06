@@ -1,0 +1,175 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { Coin } from '../Coin';
+import { Countdown } from '../Countdown';
+import { SuspicionBanner } from '../SuspicionBanner';
+import { getApi, postApi } from '../api';
+import { formatKLR, formatPct } from '@/lib/money';
+import { demoPortfolio, type HoldingView } from '../demo';
+
+interface ValuedPosition {
+  id: string;
+  type: string;
+  title?: string | null;
+  symbol?: string | null;
+  amount_klr: number;
+  lots?: number | null;
+  leverage?: number | null;
+  entry_price?: number | null;
+  rent_per_day?: number | null;
+  lock_end?: string | null;
+  list_end?: string | null;
+  status: string;
+  currentValue: number;
+  pnlPct: number;
+  liquidated?: boolean;
+  delayed?: boolean;
+}
+interface PortfolioData {
+  net: number;
+  liquid: number;
+  valued: ValuedPosition[];
+}
+
+interface DisplayHolding extends HoldingView {
+  lockEndMs?: number;
+  listEndMs?: number;
+}
+
+const EMOJI: Record<string, string> = {
+  interest: '🏦', crypto: '🪙', stock: '📈', fx: '💱', fund: '📊', real_estate: '🏠', car: '🏎', watch: '⌚',
+};
+
+function toDisplay(p: ValuedPosition): DisplayHolding {
+  const emoji = EMOJI[p.type] ?? '💠';
+  if (p.type === 'interest' || p.type === 'fund') {
+    return {
+      id: p.id, emoji, title: p.title ?? 'Vadeli Mevduat', kind: 'locked', gold: true,
+      subtitle: `${formatKLR(p.amount_klr)} → ${formatKLR(p.currentValue)} KLR vadede`,
+      lockEndMs: p.lock_end ? Date.parse(p.lock_end) : undefined,
+    };
+  }
+  if (p.type === 'real_estate') {
+    return {
+      id: p.id, emoji, title: p.title ?? 'Gayrimenkul', kind: 'listable',
+      subtitle: p.rent_per_day ? `kira +${p.rent_per_day}/gün · satış 24 saat sürer` : 'satış 24 saat sürer',
+      listEndMs: p.list_end ? Date.parse(p.list_end) : undefined,
+    };
+  }
+  if (p.type === 'car' || p.type === 'watch') {
+    return { id: p.id, emoji, title: p.title ?? 'Prestij Varlık', kind: 'prestige', gold: true, subtitle: 'Prestij varlık · profilde sergileniyor' };
+  }
+  return {
+    id: p.id, emoji, title: p.title ?? p.symbol ?? 'Pozisyon', kind: 'tradable', pnlPct: p.pnlPct,
+    subtitle: `alış ${formatKLR(p.entry_price ?? p.amount_klr)} · şimdi ${formatKLR(p.currentValue)}${p.liquidated ? ' · tasfiye' : ''}`,
+  };
+}
+
+export function PortfolioScreen({ suspicious }: { suspicious: boolean }) {
+  const [data, setData] = useState<PortfolioData | null>(null);
+  const [holdings, setHoldings] = useState<DisplayHolding[]>(demoPortfolio.holdings);
+  const [delayed, setDelayed] = useState(false);
+  const [pending, setPending] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getApi<PortfolioData>('/api/portfolio');
+      if (res.ok) {
+        setData(res.data);
+        setHoldings(res.data.valued.map(toDisplay));
+        setDelayed(res.data.valued.some((v) => v.delayed));
+      }
+    })();
+  }, []);
+
+  const net = data?.net ?? demoPortfolio.net;
+  const liquid = data?.liquid ?? demoPortfolio.liquid;
+  const valued = data ? data.net - data.liquid : demoPortfolio.valued;
+
+  async function sell(id: string) {
+    setPending(id);
+    const res = await postApi('/api/market/sell', { positionId: id });
+    setPending(null);
+    if (res.ok) setHoldings((h) => h.filter((x) => x.id !== id));
+  }
+  async function list(id: string) {
+    setPending(id);
+    const res = await postApi('/api/market/list', { positionId: id });
+    setPending(null);
+    if (res.ok) setHoldings((h) => h.map((x) => (x.id === id ? { ...x, subtitle: 'ilana konuldu · 24 saat' } : x)));
+  }
+
+  return (
+    <div className="flex-1 flex flex-col gap-[10px]" style={{ padding: '70px 18px 0' }}>
+      <div className="text-center">
+        <div className="text-t45" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.16em' }}>NET SERVET</div>
+        <div className="flex justify-center items-center gap-[10px]" style={{ marginTop: 6 }}>
+          <Coin size={30} />
+          <span className="font-display tnum num-glow" style={{ fontSize: 38, lineHeight: 1, fontWeight: 700 }}>{formatKLR(net)}</span>
+        </div>
+        <div className="flex justify-center gap-2" style={{ marginTop: 8, fontSize: 10.5, fontWeight: 600 }}>
+          <span className="bg-surface border border-border rounded-full text-t55" style={{ padding: '4px 10px' }}>Nakit {formatKLR(liquid)}</span>
+          <span className="bg-surface border border-border rounded-full text-t55" style={{ padding: '4px 10px' }}>Yatırım {formatKLR(valued)}</span>
+        </div>
+      </div>
+
+      {suspicious && <SuspicionBanner daysLeft={2} />}
+
+      {delayed && (
+        <div className="text-center text-t45" style={{ fontSize: 11, fontWeight: 500 }}>
+          Bazı varlıklarda fiyat gecikmeli gösteriliyor.
+        </div>
+      )}
+
+      {holdings.map((h) => (
+        <HoldingCard key={h.id} h={h} busy={pending === h.id} onSell={() => sell(h.id)} onList={() => list(h.id)} />
+      ))}
+
+      <div className="text-center text-t35" style={{ fontSize: 11, fontWeight: 500 }}>
+        Sıralama net servete göre · fiyatlar canlıdır.
+      </div>
+    </div>
+  );
+}
+
+function HoldingCard({ h, busy, onSell, onList }: { h: DisplayHolding; busy: boolean; onSell: () => void; onList: () => void }) {
+  return (
+    <div
+      className={`rounded-[16px] flex items-center gap-[11px] ${h.gold && h.kind === 'prestige' ? 'bg-gold-bg border border-gold-border' : 'bg-surface border border-border shadow-card'}`}
+      style={{ padding: '12px 14px' }}
+    >
+      <div className={`rounded-[11px] flex items-center justify-center flex-none ${h.kind === 'locked' ? 'bg-acc-soft' : h.kind === 'tradable' ? 'bg-gold-bg' : h.kind === 'listable' ? 'bg-good-soft' : 'bg-surface'}`} style={{ width: 36, height: 36, fontSize: 17 }}>
+        {h.emoji}
+      </div>
+      <div className="flex-1">
+        <div className={h.kind === 'prestige' ? 'text-gold' : ''} style={{ fontSize: 13, fontWeight: 700 }}>{h.title}</div>
+        <div className="text-t55" style={{ fontSize: 11, fontWeight: 500 }}>{h.subtitle}</div>
+      </div>
+
+      {h.kind === 'locked' && (
+        <div className="text-right">
+          <div className="font-display tnum text-gold" style={{ fontSize: 13, fontWeight: 700 }}>
+            {h.lockEndMs ? <Countdown to={h.lockEndMs} withDays /> : h.timer ?? '—'}
+          </div>
+          <div className="text-t45" style={{ fontSize: 10, fontWeight: 600 }}>kaldı</div>
+        </div>
+      )}
+      {h.kind === 'tradable' && (
+        <div className="flex items-center gap-2">
+          <span className={`font-display tnum ${(h.pnlPct ?? 0) >= 0 ? 'text-good' : 'text-bad'}`} style={{ fontSize: 13, fontWeight: 700 }}>{formatPct(h.pnlPct ?? 0)}</span>
+          <button type="button" onClick={onSell} disabled={busy} className="bg-acc-soft text-accent rounded-full disabled:opacity-60" style={{ fontSize: 11, fontWeight: 700, padding: '6px 13px' }}>
+            {busy ? '…' : 'Sat'}
+          </button>
+        </div>
+      )}
+      {h.kind === 'listable' && (
+        <button type="button" onClick={onList} disabled={busy} className="border-[1.5px] border-acc-border text-accent rounded-full disabled:opacity-60" style={{ fontSize: 11, fontWeight: 700, padding: '6px 13px' }}>
+          {busy ? '…' : 'İlana koy'}
+        </button>
+      )}
+      {h.kind === 'prestige' && (
+        <span className="text-gold" style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.08em' }}>PRESTİJ</span>
+      )}
+    </div>
+  );
+}
