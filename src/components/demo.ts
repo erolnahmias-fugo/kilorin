@@ -64,6 +64,10 @@ export interface OfferView {
   pricePerLot: number;
   rate?: number | null;
   leverage?: number | null;
+  /** Minimum stake for deposit offers. */
+  minStake?: number | null;
+  /** Live per-lot price for market instruments (server-quoted at page load). */
+  unitPrice?: number | null;
 }
 
 export const demoOffers: OfferView[] = [

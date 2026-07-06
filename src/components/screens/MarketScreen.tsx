@@ -66,16 +66,27 @@ export function MarketScreen({
   );
 }
 
+const INSTRUMENT_TYPES = ['crypto', 'stock', 'fx', 'fund'];
+
 function PurchaseSheet({ offer, balance, onClose }: { offer: OfferView; balance: number; onClose: () => void }) {
+  // Deposits are bought by amount, instruments by lot count, prestige/real
+  // estate as a single fixed-price unit — mirror the API's expectations.
+  const isDeposit = offer.type === 'interest';
+  const isInstrument = INSTRUMENT_TYPES.includes(offer.type);
+  const minStake = offer.minStake ?? 500;
+  const unit = offer.unitPrice ?? offer.pricePerLot;
+
   const [lots, setLots] = useState(1);
+  const [amount, setAmount] = useState(minStake);
   const [agree, setAgree] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
-  const cost = offer.pricePerLot * lots;
-  const fee = Math.round(cost * 0.01);
+  const cost = isDeposit ? amount : isInstrument ? Math.round(unit * lots) : offer.pricePerLot;
+  const fee = isInstrument ? Math.floor(cost * 0.01) : 0; // matches buy_offer: 1% only on instruments
   const remaining = balance - cost - fee;
+  const maturity = isDeposit && offer.rate != null ? Math.round(amount * (1 + offer.rate)) : null;
 
   async function confirm() {
     if (!agree) {
@@ -84,7 +95,8 @@ function PurchaseSheet({ offer, balance, onClose }: { offer: OfferView; balance:
     }
     setBusy(true);
     setError(null);
-    const res = await postApi<{ positionId: string }>('/api/market/buy', { offerId: offer.id, lots });
+    const body = isDeposit ? { offerId: offer.id, amount } : isInstrument ? { offerId: offer.id, lots } : { offerId: offer.id };
+    const res = await postApi<{ positionId: string }>('/api/market/buy', body);
     setBusy(false);
     if (!res.ok) {
       setError(res.error);
@@ -101,22 +113,37 @@ function PurchaseSheet({ offer, balance, onClose }: { offer: OfferView; balance:
         <div className="flex-1">
           <div className="font-display" style={{ fontSize: 17, fontWeight: 700 }}>{offer.title}</div>
           <div className="text-t55" style={{ fontSize: 12, fontWeight: 500 }}>
-            1 lot = <span className="tnum">{formatKLR(offer.pricePerLot)} KLR</span>
+            {isDeposit && offer.rate != null
+              ? <>%{Math.round(offer.rate * 100)} getiri · min <span className="tnum">{formatKLR(minStake)} KLR</span></>
+              : isInstrument
+                ? <>1 lot = <span className="tnum">{formatKLR(unit)} KLR</span></>
+                : <>Fiyat: <span className="tnum">{formatKLR(offer.pricePerLot)} KLR</span></>}
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between bg-bg border border-border rounded-[16px]" style={{ padding: '12px 14px', marginTop: 18 }}>
-        <button type="button" onClick={() => setLots((l) => Math.max(1, l - 1))} className="rounded-[12px] border-[1.5px] border-border text-t45 font-display" style={{ width: 40, height: 40, fontSize: 20, fontWeight: 700 }}>−</button>
-        <div className="text-center font-display tnum" style={{ fontSize: 26, fontWeight: 700 }}>
-          {lots} <span className="text-t45" style={{ fontFamily: 'var(--font-manrope)', fontSize: 13, fontWeight: 600 }}>lot</span>
+      {isDeposit ? (
+        <div className="flex items-center justify-between bg-bg border border-border rounded-[16px]" style={{ padding: '12px 14px', marginTop: 18 }}>
+          <button type="button" onClick={() => setAmount((a) => Math.max(minStake, a - 250))} className="rounded-[12px] border-[1.5px] border-border text-t45 font-display" style={{ width: 40, height: 40, fontSize: 20, fontWeight: 700 }}>−</button>
+          <div className="text-center font-display tnum" style={{ fontSize: 26, fontWeight: 700 }}>
+            {formatKLR(amount)} <span className="text-t45" style={{ fontFamily: 'var(--font-manrope)', fontSize: 13, fontWeight: 600 }}>KLR</span>
+          </div>
+          <button type="button" onClick={() => setAmount((a) => a + 250)} className="rounded-[12px] bg-acc-soft border-[1.5px] border-accent text-accent font-display" style={{ width: 40, height: 40, fontSize: 20, fontWeight: 700 }}>+</button>
         </div>
-        <button type="button" onClick={() => setLots((l) => l + 1)} className="rounded-[12px] bg-acc-soft border-[1.5px] border-accent text-accent font-display" style={{ width: 40, height: 40, fontSize: 20, fontWeight: 700 }}>+</button>
-      </div>
+      ) : isInstrument ? (
+        <div className="flex items-center justify-between bg-bg border border-border rounded-[16px]" style={{ padding: '12px 14px', marginTop: 18 }}>
+          <button type="button" onClick={() => setLots((l) => Math.max(1, l - 1))} className="rounded-[12px] border-[1.5px] border-border text-t45 font-display" style={{ width: 40, height: 40, fontSize: 20, fontWeight: 700 }}>−</button>
+          <div className="text-center font-display tnum" style={{ fontSize: 26, fontWeight: 700 }}>
+            {lots} <span className="text-t45" style={{ fontFamily: 'var(--font-manrope)', fontSize: 13, fontWeight: 600 }}>lot</span>
+          </div>
+          <button type="button" onClick={() => setLots((l) => l + 1)} className="rounded-[12px] bg-acc-soft border-[1.5px] border-accent text-accent font-display" style={{ width: 40, height: 40, fontSize: 20, fontWeight: 700 }}>+</button>
+        </div>
+      ) : null}
 
       <div className="flex flex-col gap-[9px]" style={{ marginTop: 16, fontSize: 13, fontWeight: 600 }}>
-        <Row label="Maliyet" value={`${formatKLR(cost)} KLR`} />
-        <Row label="İşlem ücreti (%1)" value={`${formatKLR(fee)} KLR`} />
+        <Row label={isDeposit ? 'Kilitlenecek tutar' : 'Maliyet'} value={`${formatKLR(cost)} KLR`} />
+        {isInstrument && <Row label="İşlem ücreti (%1)" value={`${formatKLR(fee)} KLR`} />}
+        {maturity != null && <Row label="Vadede eline geçecek" value={`${formatKLR(maturity)} KLR`} good />}
         <div className="flex justify-between border-t border-dashed border-border" style={{ paddingTop: 9 }}>
           <span className="text-t55">Kalan bakiye</span>
           <span className={`font-display tnum ${remaining < 0 ? 'text-bad' : ''}`} style={{ fontWeight: 700 }}>{formatKLR(remaining)} KLR</span>
@@ -149,11 +176,11 @@ function PurchaseSheet({ offer, balance, onClose }: { offer: OfferView; balance:
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value, good }: { label: string; value: string; good?: boolean }) {
   return (
     <div className="flex justify-between">
       <span className="text-t55">{label}</span>
-      <span className="font-display tnum">{value}</span>
+      <span className={`font-display tnum${good ? ' text-good' : ''}`}>{value}</span>
     </div>
   );
 }

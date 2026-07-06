@@ -4,6 +4,7 @@ import { demoOffers, type OfferView } from '@/components/demo';
 import { getSessionContext } from '@/lib/game/session';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { formatKLR } from '@/lib/money';
+import { getPrices, type PriceQuote } from '@/lib/prices';
 import type { Tables } from '@/lib/supabase/database.types';
 import { requireApprovedPage } from '@/lib/game/guard';
 
@@ -13,19 +14,28 @@ const OFFER_EMOJI: Record<string, string> = {
   interest: '🏦', crypto: '🪙', stock: '📈', fx: '💱', fund: '📊', real_estate: '🏠', car: '🏎', watch: '⌚',
 };
 
+const INSTRUMENT_TYPES = ['crypto', 'stock', 'fx', 'fund'];
+
 /** Map a raw offer row to a display card — traps are rendered identically (never flagged). */
-function toView(o: Tables<'market_offers'>): OfferView {
+function toView(o: Tables<'market_offers'>, quote?: PriceQuote): OfferView {
   const emoji = OFFER_EMOJI[o.type] ?? '💠';
-  const yieldy = o.type === 'interest' || o.type === 'fund';
-  const priced = ['crypto', 'stock', 'fx', 'real_estate', 'car', 'watch'].includes(o.type);
-  const rightTop = yieldy && o.rate != null ? `%${Math.round(o.rate * 100)}` : formatKLR(o.price_per_lot);
+  const yieldy = o.type === 'interest' || (o.type === 'fund' && o.rate != null);
+  const live = quote != null;
+  const rightTop =
+    yieldy && o.rate != null
+      ? `%${Math.round(o.rate * 100)}`
+      : live
+        ? formatKLR(Math.round(quote.price))
+        : formatKLR(o.price_per_lot);
   const rightBottom = yieldy
     ? o.lock_hours != null
       ? `${Math.round(o.lock_hours / 24)} günde`
       : 'vadede'
-    : priced
-      ? 'KLR'
-      : '';
+    : live
+      ? quote.delayed
+        ? 'KLR · fiyat gecikmeli'
+        : 'KLR · canlı'
+      : 'KLR';
   const lowStock = o.stock != null && o.stock <= 1;
   const footLeft = lowStock
     ? 'Son 1 adet!'
@@ -48,6 +58,8 @@ function toView(o: Tables<'market_offers'>): OfferView {
     pricePerLot: o.price_per_lot,
     rate: o.rate,
     leverage: o.leverage,
+    minStake: o.min_stake,
+    unitPrice: quote ? Math.round(quote.price) : null,
   };
 }
 
@@ -64,8 +76,19 @@ async function load(): Promise<{ offers: OfferView[]; showcaseMs: number; balanc
     const offers = offersRes.data as Tables<'market_offers'>[] | null;
     const bal = balRes.data as Tables<'member_balances'> | null;
     const showcase = ctx.member.seasons?.next_showcase_at;
+
+    // Live per-lot quotes for market instruments, so cards and the purchase
+    // sheet show real costs (the buy itself is always priced server-side).
+    const instrumentIds = (offers ?? [])
+      .filter((o) => INSTRUMENT_TYPES.includes(o.type) && o.instrument_id)
+      .map((o) => o.instrument_id as string);
+    const quotes = instrumentIds.length ? await getPrices(instrumentIds) : {};
+
     return {
-      offers: offers && offers.length ? offers.map(toView) : demoOffers,
+      offers:
+        offers && offers.length
+          ? offers.map((o) => toView(o, o.instrument_id ? quotes[o.instrument_id] : undefined))
+          : demoOffers,
       showcaseMs: showcase ? Date.parse(showcase) : fallback.showcaseMs,
       balance: bal?.balance ?? fallback.balance,
     };
