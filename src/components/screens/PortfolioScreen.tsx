@@ -42,7 +42,7 @@ const EMOJI: Record<string, string> = {
 
 function toDisplay(p: ValuedPosition): DisplayHolding {
   const emoji = EMOJI[p.type] ?? '💠';
-  if (p.type === 'interest' || p.type === 'fund') {
+  if (p.type === 'interest') {
     return {
       id: p.id, emoji, title: p.title ?? 'Vadeli Mevduat', kind: 'locked', gold: true,
       subtitle: `${formatKLR(p.amount_klr)} → ${formatKLR(p.currentValue)} KLR vadede`,
@@ -65,38 +65,58 @@ function toDisplay(p: ValuedPosition): DisplayHolding {
   };
 }
 
-export function PortfolioScreen({ suspicious }: { suspicious: boolean }) {
-  const [data, setData] = useState<PortfolioData | null>(null);
-  const [holdings, setHoldings] = useState<DisplayHolding[]>(demoPortfolio.holdings);
-  const [delayed, setDelayed] = useState(false);
+export function PortfolioScreen({
+  suspicious,
+  initial = null,
+  loadError = null,
+}: {
+  suspicious: boolean;
+  /** Server-rendered portfolio; null = demo mode (design preview only). */
+  initial?: PortfolioData | null;
+  loadError?: string | null;
+}) {
+  const demo = initial === null && loadError === null;
+  const [data, setData] = useState<PortfolioData | null>(initial);
+  const [holdings, setHoldings] = useState<DisplayHolding[]>(
+    initial ? initial.valued.map(toDisplay) : demo ? demoPortfolio.holdings : [],
+  );
+  const [delayed, setDelayed] = useState(initial?.valued.some((v) => v.delayed) ?? false);
   const [pending, setPending] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(loadError);
 
+  // Refresh with live prices after mount (server render may be seconds old).
   useEffect(() => {
+    if (demo) return;
     (async () => {
       const res = await getApi<PortfolioData>('/api/portfolio');
       if (res.ok) {
         setData(res.data);
         setHoldings(res.data.valued.map(toDisplay));
         setDelayed(res.data.valued.some((v) => v.delayed));
+        setError(null);
+      } else {
+        setError(res.error);
       }
     })();
-  }, []);
+  }, [demo]);
 
-  const net = data?.net ?? demoPortfolio.net;
-  const liquid = data?.liquid ?? demoPortfolio.liquid;
-  const valued = data ? data.net - data.liquid : demoPortfolio.valued;
+  const net = data?.net ?? (demo ? demoPortfolio.net : 0);
+  const liquid = data?.liquid ?? (demo ? demoPortfolio.liquid : 0);
+  const valued = data ? data.net - data.liquid : demo ? demoPortfolio.valued : 0;
 
   async function sell(id: string) {
     setPending(id);
     const res = await postApi('/api/market/sell', { positionId: id });
     setPending(null);
     if (res.ok) setHoldings((h) => h.filter((x) => x.id !== id));
+    else setError(res.error);
   }
   async function list(id: string) {
     setPending(id);
     const res = await postApi('/api/market/list', { positionId: id });
     setPending(null);
     if (res.ok) setHoldings((h) => h.map((x) => (x.id === id ? { ...x, subtitle: 'ilana konuldu · 24 saat' } : x)));
+    else setError(res.error);
   }
 
   return (
@@ -114,6 +134,18 @@ export function PortfolioScreen({ suspicious }: { suspicious: boolean }) {
       </div>
 
       {suspicious && <SuspicionBanner daysLeft={2} />}
+
+      {error && (
+        <div className="bg-bad-soft border border-bad rounded-[14px] text-center" style={{ padding: '10px 14px', fontSize: 12, fontWeight: 600 }}>
+          Portföy güncellenemedi: {error}
+        </div>
+      )}
+
+      {!error && !demo && holdings.length === 0 && (
+        <div className="text-center text-t45" style={{ fontSize: 12.5, fontWeight: 500, padding: '18px 0' }}>
+          Henüz varlığın yok — Piyasa'dan bir şeyler kap. 💸
+        </div>
+      )}
 
       {delayed && (
         <div className="text-center text-t45" style={{ fontSize: 11, fontWeight: 500 }}>
